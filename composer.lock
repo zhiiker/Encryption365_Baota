@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0dd3394c10353776f7db2f6ac32447f9",
+    "content-hash": "eb377193cb0e5d1012bfeeb1bea058e3",
     "packages": [
         {
             "name": "blobfolio/blob-common",
-            "version": "dev-master",
+            "version": "8.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Blobfolio/blob-common.git",
-                "reference": "168e562fca83dff0bc0c6d59317452115949e259"
+                "reference": "54a10c257c1fc0226a4281c9b10214a5e2a5c768"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Blobfolio/blob-common/zipball/168e562fca83dff0bc0c6d59317452115949e259",
-                "reference": "168e562fca83dff0bc0c6d59317452115949e259",
+                "url": "https://api.github.com/repos/Blobfolio/blob-common/zipball/54a10c257c1fc0226a4281c9b10214a5e2a5c768",
+                "reference": "54a10c257c1fc0226a4281c9b10214a5e2a5c768",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -69,7 +69,7 @@
                 "php",
                 "sanitizing"
             ],
-            "time": "2020-01-13T01:08:45+00:00"
+            "time": "2018-06-17T04:46:51+00:00"
         },
         {
             "name": "blobfolio/blob-domain",

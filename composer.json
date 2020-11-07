@@ -23,7 +23,8 @@
         "ext-curl": "*",
         "jorisros/nginxparser": "dev-master",
         "ext-sqlite3": "*",
-        "blobfolio/blob-domain": "8.0.0"
+        "blobfolio/blob-domain": "8.0.0",
+        "blobfolio/blob-common": "8.0.0"
     },
     "autoload": {
         "psr-4": {
