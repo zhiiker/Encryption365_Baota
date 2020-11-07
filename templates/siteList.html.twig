@@ -1,0 +1,123 @@
+<table id="sites" class="table table-hover encryption365-table divtable " style="width:100%">
+    <thead>
+    <tr>
+        <th>站点名称</th>
+        <th style="min-width: 68px;">SSL</th>
+        <th style="min-width: 50px;">级别</th>
+        <th style="width: 58px;">类型</th>
+        <th style="min-width: 80px">失效日期</th>
+        <th style="min-width: 50px;">操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td colspan="7" style="text-align: center;">
+            <img src="/encryption365/static/img/ajax-loader.gif" style="height: 15px;"> 数据加载中...
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#sites').DataTable( {
+            "processing": true,
+            "serverSide": true,
+            "paging": true, //开启分页
+            "ajax": {
+                url:'/plugin?action=a&s=getSiteList&name=encryption365',
+                type:'POST'
+            },
+            "ordering":false,
+            "columns": [
+                {"data":null,
+                    render: function(row, index){
+                        return '<span style="font-size: 14px;">'+row.name +'</span><br><span class="to-sitepath"><span class="glyphicon glyphicon-folder-open enc365-icon-folder" onclick="encryption365.openPath(\''+row.path+'\')" style="margin-right: 5px;"></span> '+row.path+'</span>';
+                    }
+                },
+                {"data":null,
+                    render:function(row, index){
+                        if(row.vhost_info.ssl_enabled === true){
+                            return '<span  class="enc365-icon-enabled">已开</span>'
+                        }else{
+                            return '<span  class="enc365-icon-disabled">未开</span>'
+                        }
+                    }
+                },
+                {"data":null,
+                    render:function(row, index){
+                        if(row.vhost_info.ssl_enabled === true){
+                            if(row.vhost_info.cert_info.cert_class === "DV"){
+                                return '<span class="enc365-icon-disabled">DV</span>'
+                            }else if(row.vhost_info.cert_info.cert_class === "OV"){
+                                return '<span class="enc365-icon-warning">OV</span>'
+                            }else if(row.vhost_info.cert_info.cert_class === "EV"){
+                                return '<span class="enc365-icon-enabled">EV</span>'
+                            }
+                        }else{
+                            return '-'
+                        }
+                    }
+                },
+                {"data":null,
+                    render:function(row, index){
+                        if(row.ssl_order !== null){
+                            if(row.ssl_order.is_business === 1){
+                                return '商业证书'
+                            }else{
+                                return '<span style="color: #888;">免费证书</span>'
+                            }
+                        }else{
+                            return '未知类型'
+                        }
+                    }
+                },
+
+                {"data":null,
+                    render:function(row, index){
+                        if(row.vhost_info.ssl_enabled === true){
+                            return row.vhost_info.cert_info.valid_to_date;
+                        }else{
+                            return '-';
+                        }
+                    }
+                },
+                {"data":null,
+                    render: function(row, index){
+                        if(row.vhost_info.ssl_enabled === false && row.ssl_order === null){
+                            return '<a href="javascript:;" class="btlink" onclick="encryption365.page(\'createSSLOrder\', {siteName: \''+row.name+'\'}, \'数据加载中\')">申请 SSL</a>';
+                        }else{
+                            return '<a href="javascript:;" class="btlink" onclick="encryption365.page(\'siteSetting\', {siteName: \''+row.name+'\'}, \'数据加载中\')">设置</a>';
+                        }
+                    }
+                }
+            ],
+            "language": {
+                "processing": "处理中...",
+                "lengthMenu": "每页显示 _MENU_ 项记录",
+                "zeroRecords": "没有找到相应的记录",
+                "info": "第 _START_ 至 _END_ 行，共 _TOTAL_ 行",
+                "infoEmpty": "第 0 至 0 项结果，共 0 项",
+                "infoFiltered": "(从 _MAX_ 项记录中搜索)",
+                "infoPostFix": "",
+                "search": "搜索站点:",
+                "searchPlaceholder": "输入站点名称查找...",
+                "url": "",
+                "thousands": "'",
+                "emptyTable": "表中数据为空",
+                "loadingRecords": "载入中...",
+                "infoThousands": ",",
+                "paginate": {
+                    "first": "首页",
+                    "previous": "上页",
+                    "next": "下页",
+                    "last": "末页"
+                }
+            },
+            "pageLength": 12,
+            "lengthMenu": [12, 15, 18, 20],
+            "stateSave": false,
+            "autoWidth": true,
+        } );
+    } );
+</script>

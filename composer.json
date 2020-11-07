@@ -1,0 +1,33 @@
+{
+    "name": "trustocean/encryption365",
+    "description": "Encryption365 SSL Security Management Center",
+    "type": "project",
+    "license": "QiaoKr Corporation Business Software License",
+    "authors": [
+        {
+            "name": "Jason Long",
+            "email": "jasonlong@qiaokr.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "nette/database": "3.0.6",
+        "ext-pdo": "*",
+        "ext-openssl": "*",
+        "php": "^7.1",
+        "twig/twig": "2.12.5",
+        "ext-json": "*",
+        "ltd-beget/apache-configurator":"*",
+        "romanpitak/nginx-config-processor": "*",
+        "gitstream/nginx-parser": "dev-master",
+        "ext-curl": "*",
+        "jorisros/nginxparser": "dev-master",
+        "ext-sqlite3": "*",
+        "blobfolio/blob-domain": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "TrustOcean\\Encryption365\\": "src/"
+        }
+    }
+}

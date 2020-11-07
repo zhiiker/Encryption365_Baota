@@ -1,0 +1,95 @@
+<div class="page-desc">
+    <div class="enc365-page-title">组织验证信息模板</div>
+    为了方便事业单位和企业组织完成高级商业SSL证书的组织验证流程，请您在此页面创建信息模板，以便在申请和续费证书时选用。
+</div>
+
+<div style="margin-bottom: 15px;">
+    <button class="btn btn-primary btn-sm" onclick="encryption365.page('createOrganization')">新建组织信息</button>
+</div>
+<table id="sites" class="table table-hover encryption365-table divtable " style="width:100%">
+    <thead>
+    <tr>
+        <th>组织名称</th>
+        <th>注册编号</th>
+        <th>国家/地区</th>
+        <th>审批邮箱</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td colspan="8" style="text-align: center;">
+            <img src="/encryption365/static/img/ajax-loader.gif" style="height: 15px;"> 数据加载中...
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#sites').DataTable( {
+            "processing": true,
+            "serverSide": true,
+            "paging": true, //开启分页
+            "ajax": {
+                url:'/plugin?action=a&s=getOrgTemplateList&name=encryption365',
+                type:'POST'
+            },
+            "ordering":false,
+            "columns": [
+                {"data":null,
+                    render: function(row, index){
+                        return row.organization_name;
+                    }
+                },
+                {"data":null,
+                    render:function(row, index){
+                        return row.registered_no
+                    }
+                },
+                {"data":null,
+                    render:function(row, index){
+                        return row.country.toUpperCase()
+                    }
+                },
+                {"data":null,
+                    render:function(row, index){
+                        return row.contact_email
+                    }
+                },
+                {"data":null,
+                    render: function(row, index){
+                        return '<a href="javascript:;" class="btlink" onclick="encryption365.page(\'updateOrganization\', {org_id: \''+row.id+'\'}, \'数据加载中\')">编辑</a>';
+                    }
+                }
+            ],
+            "language": {
+                'loadingRecords': '&nbsp;',
+                'processing': '<div class="spinner"></div>',
+                "lengthMenu": "每页显示 _MENU_ 项记录",
+                "zeroRecords": "没有找到相应的记录",
+                "info": "第 _START_ 至 _END_ 行，共 _TOTAL_ 行",
+                "infoEmpty": "第 0 至 0 项结果，共 0 项",
+                "infoFiltered": "(从 _MAX_ 项记录中搜索)",
+                "infoPostFix": "",
+                "search": "搜索组织:",
+                "searchPlaceholder": "输入组织名称查找...",
+                "url": "",
+                "thousands": "'",
+                "emptyTable": "您还没有创建过组织认证模板",
+                "infoThousands": ",",
+                "paginate": {
+                    "first": "首页",
+                    "previous": "上页",
+                    "next": "下页",
+                    "last": "末页"
+                }
+            },
+            "pageLength": 12,
+            "lengthMenu": [12, 15, 18, 20],
+            "stateSave": false,
+            "autoWidth": true,
+        } );
+    } );
+</script>

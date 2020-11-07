@@ -1,0 +1,72 @@
+<div class="page-desc">
+    <div class="enc365-page-title">账户注册</div>
+    填写您的账户信息，完成注册后即可开始使用由环智中诚提供的Encryption365自动化证书服务客户端
+</div>
+{# 引导步骤 #}
+<div class="to-steps">
+    <span>
+        <i>1</i>
+        <i>发送验证码</i>
+    </span>
+    <span class="active">
+        <i>2</i>
+        <i>补充账户信息</i>
+    </span>
+    <span>
+        <i>3</i>
+        <i>完成注册</i>
+    </span>
+</div>
+{# 登录框 #}
+<div style="max-width: 460px;margin: 0 auto;padding-top: 15px;">
+    <div class="to-altert-message">提示: 我们已经向您的电子邮件地址 {{ email }} 发送了一封包含注册验证码的邮件，请您检查您的收件箱/垃圾箱, 并填写验证码到下方完成注册。</div>
+
+    <form id="regTwo">
+        <div class="line">
+            <span class="tname">账户邮箱</span>
+            <input class="bt-input-text" name="username" type="email" required value="{{ email }}" readonly style="width:230px;border: none;">
+        </div>
+        <div class="line">
+            <span class="tname">验证码</span>
+            <input class="bt-input-text" name="authcode" type="number" minlength="4" maxlength="8" required  value="" style="width:170px">
+        </div>
+        <div class="line">
+            <span class="tname">设置密码</span>
+            <input class="bt-input-text" name="password" type="password" minlength="8" maxlength="136" required value="" style="width:170px">
+        </div>
+        <div class="line">
+            <span class="tname">公司名称</span>
+            <input class="bt-input-text" name="companyname" type="text" required value="" style="width:230px">
+        </div>
+        <div class="line">
+            <span class="tname">所在国家/地区</span>
+            <select class="bt-input-text" name="country">
+                {% include 'includes/selectOptionCountry.html.twig' with {'default_c':'CN'} %}
+            </select>
+        </div>
+        <div class="line">
+            <span class="tname">姓名</span>
+            <input class="bt-input-text" name="realName" type="text" minlength="2" maxlength="64" required value="" style="width:170px">
+        </div>
+        <div class="line">
+            <span class="tname">身份证号码</span>
+            <input class="bt-input-text" name="idcardNumber" type="text" minlength="18" maxlength="18" required value="" style="width:230px">
+        </div>
+        <div class="line">
+            <span class="tname">手机号码</span>
+            <input class="bt-input-text" name="phoneNumber" type="number"  required value="" style="width:230px">
+        </div>
+        <div class="line" style="padding-left: 100px;">
+            <button type="submit" class="btn btn-success btn-sm" title="完成账户注册"> 完成注册</button>
+        </div>
+    </form>
+    <div class="line" style="padding-left: 100px;">
+        <a href="javascript:;" onclick="javascript:encryption365.page('getRegister');" title="返回上一步"> 返回上一步</a>
+    </div>
+</div>
+<script>
+    $('form#regTwo').submit(function(e){
+        e.preventDefault(); // 禁止常规提交
+        encryption365.accountRegStep2($('form#regTwo').serialize());
+    });
+</script>

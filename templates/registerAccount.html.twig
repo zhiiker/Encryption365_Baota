@@ -1,0 +1,40 @@
+<div class="page-desc">
+    <div class="enc365-page-title">账户注册</div>
+    填写您的账户信息，完成注册后即可开始使用由环智中诚提供的Encryption365自动化证书服务客户端
+</div>
+{# 引导步骤 #}
+<div class="to-steps">
+    <span class="active">
+        <i>1</i>
+        <i>发送验证码</i>
+    </span>
+    <span>
+        <i>2</i>
+        <i>补充账户信息</i>
+    </span>
+    <span>
+        <i>3</i>
+        <i>完成注册</i>
+    </span>
+</div>
+{# 登录框 #}
+<div style="max-width: 460px;margin: 0 auto;padding-top: 15px;">
+    <form id="regStep1">
+    <div class="line">
+        <span class="tname">账户邮箱</span>
+        <input class="bt-input-text" name="email" required type="email" placeholder="my@example.com" value="" style="width:230px">
+    </div>
+    <div class="line" style="padding-left: 100px;">
+        <button type="submit" class="btn btn-success btn-sm" title="发送电子邮箱验证码"> 发送验证码</button>
+    </div>
+    <div class="line" style="padding-left: 100px;">
+        <a href="javascript:;" onclick="javascript:encryption365.page('getLogin');" title="点此按钮登陆 环智中诚™ 账户"> 已有账户？立即登陆</a>
+    </div>
+    </form>
+</div>
+<script>
+    $('form#regStep1').submit(function(e){
+        e.preventDefault(); // 禁止常规提交
+        encryption365.accountRegStep1($('form#regStep1').serialize());
+    });
+</script>

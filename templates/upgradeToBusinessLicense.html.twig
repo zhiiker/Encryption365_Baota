@@ -1,0 +1,161 @@
+{% include "common.html.twig" %}
+<style>
+    .bt-w-main{
+        height: 738px !important;
+    }
+    .layui-layer.layui-layer-page{
+        height: 780px !important;
+    }
+</style>
+<div class="page-desc">
+    <div class="enc365-page-title">商业SSL证书</div>
+    商业 SSL 证书拥有更高的可用性保障, 证书颁发机构严格的运营, 更高的兼容性和可信度, 确保您的业务安全和持续性加密防护
+</div>
+{# 服务器基本信息 #}
+<div class="row" style="margin: 0px;">
+    <div class="col-md-6" style="padding: 0px;width: 52%;padding-right: 5px;">
+        <div class="line">
+            <div style="margin-bottom: 10px;">选择类型</div>
+            <div class="to_tvalue" style="display: block; height: auto;">
+                {% for pid,product in products %}
+                    {% if product.isFree is same as(false) %}
+                    <div class="to-cart ssl-product" data-pid="{{ pid }}" style="background-image: url('{{ product.logo }}');{% if product.promote is same as(false) and product.recommended is same as(false)%}padding-bottom: 20px;{% endif %}">
+                        <label data-pid="{{ pid }}" data-level="{{ product.level }}" {% if product.businessDefault is same as(true) %}data-default-selected{% endif %} {% if product.default is same as(true) %}data-default-selected{% endif %} data-price-fqdn="{{ product.price.fqdn }}" data-period-text="{{ product.periodText }}" data-price-wildcard="{{ product.price.wildcard }}" data-price-ipv4="{{ product.price.fqdn }}" onclick="encryption365.localCartTotal(this)">
+                            <input type="radio" name="pid" data-level="{{ product.level }}" value="{{ pid }}" {% if product.default is same as(true) %}checked{% endif %} {% if product.businessDefault is same as(true) %}checked{% endif %}>
+                            <span>{{ product.title }}</span>
+                            <table>
+                                <tbody>
+                                <tr>
+                                    <td><span>适用:</span> {{ product.useage }}</td>
+                                    <td><span>级别:</span> {{ product.class }}</td>
+                                    <td><span>有效期:</span> {{ product.term }}</td>
+                                    <td><span>技术支持:</span> {% if product.support is same as(false) %}无{% else %}有{% endif %}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </label>
+                        {% if product.promote is same as(true) %}
+                            <span class="to-cart-promo">{{ product.promoText }}</span>
+                        {% endif %}
+                        {% if product.recommended is same as(true) %}
+                            <span class="to-cart-recom">推荐</span>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="line" id="orgSelection" style="margin-top: 15px;display: none;">
+            <span class="to_tvalue" style="height: auto;">
+                <div>申请人信息</div>
+                <label style="width: 100%;display: block;color: #757575; font-weight: 500;">
+                    <select name="org" class="form-control input-sm" style="width: 100%;">
+                        <option value="-1">-- 请选择企业/组织信息 --</option>
+                        {% for org in orgs %}
+                            <option value="{{ org.id }}">{{ org.organization_name }}</option>
+                        {% endfor %}
+                    </select>
+                    <p>请选择作为此证书申请人的组织/企业信息, <a href="#" onclick="encryption365.page('createOrganization',{},'处理中')" style="color: #00a907;">点此创建新的信息模板</a></p>
+                </label>
+            </span>
+        </div>
+    </div>
+    <div class="col-md-5" style="padding: 0px;width: 48%;padding-left: 10px;">
+        {#        <div class="line">#}
+        {#            <span class="tname">网站名称</span>#}
+        {#            <span class="to_tvalue">{{ site.name }}</span>#}
+        {#        </div>#}
+        {#        <div class="line">#}
+        {#            <span class="tname">网站目录</span>#}
+        {#            <span class="to_tvalue" style="height: auto; word-break: break-all; padding-left: 100px;"><span class="glyphicon glyphicon-folder-open enc365-icon-folder" onclick="encryption365.openPath('{{ site.path }}')"></span>  {{ site.path }}</span>#}
+        {#        </div>#}
+        <div class="line" style="padding-top: 0px;">
+            <div class="to_tvalue" style="height: auto;">
+                <div>网站域名</div>
+                {% if site.site_domains is not empty %}
+                    <textarea style="padding: 5px 10px;margin: 0px; width: 100%; height: 116px; line-height: 18px; border: 1px solid rgb(221, 221, 221);" disabled>{% for domain in site.site_domains %}{{ domain }}
+{% endfor %}</textarea>
+                {% else %}
+                    暂无域名
+                {% endif %}
+            </div>
+        </div>
+        <div class="line">
+            <span class="to_tvalue to-domain-ans" style="height: auto;font-weight: 500;margin-left: 0px">
+                <div>费用详情</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>类型</th>
+                            <th>数量</th>
+                            <th>单价</th>
+                            <th>小计</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if site.valid_cert_domains_count.fqdn > 0 %}
+                            <tr>
+                                <td>一般域名</td>
+                                <td><span data-fqdn="{{ site.valid_cert_domains_count.fqdn }}">{{ site.valid_cert_domains_count.fqdn }}</span> 条</td>
+                                <td><span data-domain-price-fqdn>-</span> 元</td>
+                                <td><span data-domain-pricet-fqdn>-</span> 元</td>
+                            </tr>
+                        {% endif %}
+                        {% if site.valid_cert_domains_count.ipv4 > 0 %}
+                            <tr>
+                                <td>公网IPv4</td>
+                                <td><span data-ipv4="{{ site.valid_cert_domains_count.ipv4 }}">{{ site.valid_cert_domains_count.ipv4 }}</span> 个</td>
+                                <td><span data-domain-price-ipv4>-</span> 元</td>
+                                <td><span data-domain-pricet-ipv4>-</span> 元</td>
+                            </tr>
+                        {% endif %}
+                        {% if site.valid_cert_domains_count.wildcard > 0 %}
+                            <tr>
+                                <td>通配符组</td>
+                                <td><span data-wildcard="{{ site.valid_cert_domains_count.wildcard }}">{{ site.valid_cert_domains_count.wildcard }}</span> 组</td>
+                                <td><span data-domain-price-wildcard>-</span> 元</td>
+                                <td><span data-domain-pricet-wildcard>-</span> 元</td>
+                            </tr>
+                        {% endif %}
+                        <tr>
+                            <td colspan="3" style="text-align: right">合计: </td>
+                            <td style="color: #888888;"><span data-toCartTotal style="color: #ff6232;">--.--</span> 元/<span data-toCartPeriod></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="color: #828282;">说明: 根据域名类型的不同，多种域名费用组成证书总费用</p>
+            </span>
+        </div>
+        <div class="line">
+            <span class="to_tvalue" style="height: auto;">
+                <div>自动续费</div>
+                <label style="width: 100%;display: block;color: #757575; font-weight: 500;">
+                    <input name="autorenewal" type="checkbox" checked="checked">
+                    <span>开启自动续费</span>
+                    <p>开启后将在到期前尝试申请、更新证书并收取费用。</p>
+                </label>
+            </span>
+        </div>
+        <div class="line">
+            <span class="tname" style="width: 70px;">费用总计</span>
+            <span class="to_tvalue">
+                <div class="cart-total"><span data-toCartTotal>--.--</span>元/<span data-toCartPeriod></span></div>
+            </span>
+        </div>
+        <div class="line">
+            <span class="to_tvalue">
+                <button onclick="javascript:encryption365.upgradeToBusinessSSL('{{ site.name }}',$('input[name=pid]:checked').val(),$('input[name=pid]:checked').data('level'), $('select[name=org]').val(), $('input[name=autorenewal]').is(':checked'));" class="btn btn-success btn-sm" title="立即升级"> 立即升级商业证书</button>
+                <button onclick="javascript:encryption365.page('siteSetting',{siteName:'{{ site.name }}'});" class="btn btn-default btn-sm btn-nobg" title="返回站点详情" style="color: #b9b9b9 !important;"> 放弃升级</button>
+            </span>
+        </div>
+    </div>
+</div>
+<script>
+    // 初始化购物车价格
+    encryption365.localCartTotal($('label[data-default-selected]'));
+    // 更好的购物车产品点击捕获
+    $('div.to-cart.ssl-product').click(function(){
+        $(this).children()[0].click();
+    })
+</script>

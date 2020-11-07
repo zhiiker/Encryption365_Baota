@@ -1,0 +1,35 @@
+<div class="page-desc">
+    <div class="enc365-page-title">账户绑定</div>
+    登录您的环智中诚™账户, 并将此 Encryption365 客户端注册到您的账户名下, 即刻开始管理和自动化部署、续费您的 SSL 安全证书。
+</div>
+{# 登录框 #}
+<div style="max-width: 360px; margin: 0 auto; padding-top: 85px;">
+    <div style="text-align: center;">
+        <div style="width: 60px; height: 60px; border: 2px solid #20a53a; line-height: 50px; border-radius: 30px; margin: 0 auto;">
+            <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyB0PSIxNjAzNjI3MjA3NjAzIiBjbGFzcz0iaWNvbiIgdmlld0JveD0iMCAwIDEwMjQgMTAyNCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHAtaWQ9IjMwNTIiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iNTAiIGhlaWdodD0iNTAiPjxkZWZzPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PC9zdHlsZT48L2RlZnM+PHBhdGggZD0iTTUxMiA0OTZjLTEyNC44IDAtMjI0LTk5LjItMjI0LTIyNHM5OS4yLTIyNCAyMjQtMjI0IDIyNCA5OS4yIDIyNCAyMjQtOTkuMiAyMjQtMjI0IDIyNHogbTAtMzg0Yy04OS42IDAtMTYwIDcwLjQtMTYwIDE2MHM3MC40IDE2MCAxNjAgMTYwIDE2MC03MC40IDE2MC0xNjAtNzAuNC0xNjAtMTYwLTE2MHpNODgwIDk3NmgtNzM2Qzk5LjIgOTc2IDY0IDk0MC44IDY0IDg5NmMwLTE1Ni44IDE1MC40LTM4NCAzODQtMzg0aDEyOGMyMzMuNiAwIDM4NCAyMjcuMiAzODQgMzg0IDAgNDQuOC0zNS4yIDgwLTgwIDgwek00NDggNTc2QzI1NiA1NzYgMTI4IDc2OCAxMjggODk2YzAgOS42IDYuNCAxNiAxNiAxNmg3MzZjOS42IDAgMTYtNi40IDE2LTE2IDAtMTI4LTEyOC0zMjAtMzIwLTMyMGgtMTI4eiIgcC1pZD0iMzA1MyIgZmlsbD0iIzAwYTkwNyI+PC9wYXRoPjwvc3ZnPg==" style="height: 35px;">
+        </div>
+        <p style="margin-top: 15px;margin-bottom: 15px;">登陆您的 <strong>环智中诚™</strong> 账户, 并关联此客户端。</p>
+    </div>
+    <form id="loginForm">
+    <div class="line">
+        <span class="tname">账户邮箱</span>
+        <input class="bt-input-text" id="to_username" name="username" required type="email" placeholder="my@example.com" value="" style="width: 230px;">
+    </div>
+    <div class="line">
+        <span class="tname">账户密码</span>
+        <input class="bt-input-text" id="to_password" name="password" required type="password" value="" style="width: 230px;">
+    </div>
+    <div class="line" style="padding-left: 100px;">
+        <button type="submit" class="btn btn-success btn-sm" title="立即登录并在环智中诚™账户内注册和绑定此客户端"> 登录并绑定</button>
+    </div>
+    <div class="line" style="padding-left: 100px;">
+        <a href="javascript:;" onclick="javascript:encryption365.page('getRegister');" title="点此按钮免费注册并获得 环智中诚™ 账户"> 免费注册 环智中诚™ 账户?</a>
+    </div>
+    </form>
+</div>
+<script>
+    $('form#loginForm').submit(function(e){
+        e.preventDefault(); // 禁止常规提交
+        encryption365.clientRegister($('#to_username').val(), $('#to_password').val());
+    });
+</script>

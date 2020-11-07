@@ -1,0 +1,92 @@
+<div class="page-desc">
+    <div class="enc365-page-title">新建组织信息</div>
+    为了方便事业单位和企业组织完成高级商业SSL证书的组织验证流程，请您在此页面创建信息模板，以便在申请和续费证书时选用。
+</div>
+
+
+<div class="row" style="margin: 0px;">
+    <form id="newOrg">
+    <div class="col-md-6">
+        <div class="line">
+            <span class="tname">公司/组织名称</span>
+            <input class="bt-input-text" required name="organization_name" maxlength="64" type="text" placeholder="如：西安某某科技有限公司" value="" style="width: 218px;">
+        </div>
+        <div class="line">
+            <span class="tname">组织编号</span>
+            <input class="bt-input-text" required name="registered_no" type="text" maxlength="25" value="" placeholder="输入统一社会信用编码或组织编号" style="width: 218px;">
+        </div>
+        <div class="line">
+            <span class="tname">成立日期</span>
+            <input class="bt-input-text" required name="date_of_incorporation" type="text" value="" maxlength="10" placeholder="如：1991-01-01" minlength="10" style="width: 218px;">
+        </div>
+        <div class="line">
+            <span class="tname">部门名称</span>
+            <input class="bt-input-text" required name="organizationalUnitName" max="64" type="text" placeholder="如：技术研发部" value="" style="width: 218px;">
+        </div>
+        <div class="line">
+            <span class="tname">注册地址</span>
+            <input class="bt-input-text" required name="registered_address_line1"  maxlength="128" placeholder="如：雁塔区锦业路西安中心2008室"  type="text" value="" style="width: 218px;">
+        </div>
+        <div class="line">
+            <span class="tname">所在城市</span>
+            <input class="bt-input-text" required name="city" type="text" maxlength="128" placeholder="如：西安" value="" style="width: 218px;">
+        </div>
+        <div class="line">
+            <span class="tname" style="width: 199px;">省份/行政区/直辖市/自治区</span>
+            <input class="bt-input-text" required name="state" type="text" maxlength="128" value="" placeholder="如：陕西" style="width: 118px;">
+        </div>
+
+        <div class="line">
+            <span class="tname">国家/地区</span>
+            <select name="country" style="width: 218px;" class="form-control input-sm">
+                {% include 'includes/selectOptionCountry.html.twig' with {'default_c':'CN'}%}
+            </select>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="line">
+            <span class="tname">邮政编号</span>
+            <input class="bt-input-text" required name="postal_code" type="text" maxlength="40" placeholder="如：710000" value="" style="width: 218px;">
+        </div>
+        <div class="line">
+            <span class="tname">企业电话</span>
+            <input class="bt-input-text" required name="organization_phone" type="text" maxlength="15" placeholder="如：02988188289" value="" style="width: 218px;">
+        </div>
+        <div style="border: 1px solid #e0a100; padding: 10px; margin-top: 10px;background: #fffdfb; margin-bottom: 10px;">
+            <p>证书订单审批人:</p>
+            <div class="line">
+                <span class="tname">姓名</span>
+                <input class="bt-input-text" required name="contact_name" type="text" maxlength="64" value="" placeholder="如：张XX" style="width: 203px;">
+            </div>
+            <div class="line">
+                <span class="tname">职位</span>
+                <input class="bt-input-text" required name="contact_title" type="text" maxlength="64" placeholder="如：CEO" value="" style="width: 203px;">
+            </div>
+            <div class="line">
+                <span class="tname">联系电话</span>
+                <input class="bt-input-text" required name="contact_phone" type="text" value="" placeholder="如：13000000000" maxlength="15" style="width: 203px;">
+            </div>
+            <div class="line">
+                <span class="tname">邮箱(重要)</span>
+                <input class="bt-input-text" required name="contact_email" type="email" value="" placeholder="如：administrator@company.com" maxlength="255" style="width: 203px;">
+            </div>
+        </div>
+        <div class="line" style="padding-left: 100px;">
+            <button type="submit" class="btn btn-success btn-sm" title="创建新的组织信息"> 保存新的组织</button>
+        </div>
+    </div>
+    </form>
+</div>
+<div style="margin-top: 15px;">
+    <p style="margin-bottom: 10px;">提示信息:</p>
+    <ul>
+        <li>1.<em>审批人邮箱地址</em> 的作用是在申请、续费过程中接收订单信息和完成组织订单的审批，此邮箱需由实际的发出证书验证申请的实体组织内部已被授权申请数字证书的员工掌握。</li>
+        <li>2.<em>证书订单审批人联系人信息</em> 必须是由实际的发出证书验证申请的实体组织内部已被授权申请数字证书的员工的个人信息。</li>
+    </ul>
+</div>
+<script>
+    $('form#newOrg').submit(function(e){
+        e.preventDefault(); // 禁止常规提交
+        encryption365.createOrganization($('form#newOrg'));
+    });
+</script>

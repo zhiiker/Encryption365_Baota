@@ -1,0 +1,41 @@
+<div class="page-desc">
+    <div class="enc365-page-title">账户充值</div>
+    为您的环智中诚™账户储值，以确保有足够的余额进行自动续费和申请商业SSL证书。
+</div>
+{# 支付方式信息 #}
+<script type="application/javascript" src="/encryption365/static/js/qrcode.js"></script>
+<div>
+    <div class="line">
+        <span class="tname">当前余额</span>
+        <span class="to_tvalue">{{ account.credit }} 元</span>
+    </div>
+    <form id="addFunds">
+    <div class="line">
+        <span class="tname">支付方式</span>
+        <span class="to_tvalue" style="height: auto; padding-left: 100px; margin-bottom: 15px;"><div class="logo-alipay" style="height: 30px;"></div></span>
+    </div>
+    <div class="line">
+        <span class="tname">充值金额</span>
+        <span class="to_tvalue">
+            <input name="amount" class="bt-input-text" type="text" onkeyup="this.value=/^[0-9]*\.?[0-9]{0,2}$/.test(this.value) ? this.value : this.value.substring(0,this.value.length-1)" maxlength="9" minlength="1" required placeholder="如: 500.00">
+        </span>
+    </div>
+    <div class="line">
+        <button class="btn btn-sm btn-success" type="submit" style="margin-left: 100px;">立即充值</button>
+    </div>
+    </form>
+</div>
+
+<div style="margin-top: 15px;">
+    <p style="margin-bottom: 10px;">提示信息:</p>
+    <ul>
+        <li>1.如需对公付款, 请通过左侧帮助菜单联系我们获取对公付款信息和确认流程。</li>
+    </ul>
+</div>
+
+<script>
+    $('form#addFunds').submit(function(e){
+        e.preventDefault(); // 禁止常规提交
+        encryption365.tryToAddFunds($('form#addFunds'));
+    });
+</script>
