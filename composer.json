@@ -19,12 +19,10 @@
         "ext-json": "*",
         "ltd-beget/apache-configurator":"*",
         "romanpitak/nginx-config-processor": "*",
-        "gitstream/nginx-parser": "dev-master",
         "ext-curl": "*",
-        "jorisros/nginxparser": "dev-master",
         "ext-sqlite3": "*",
-        "blobfolio/blob-domain": "8.0.0",
-        "blobfolio/blob-common": "8.0.0"
+        "londry/blob-domain": "dev-main",
+        "londry/blob-common": "dev-main"
     },
     "autoload": {
         "psr-4": {
