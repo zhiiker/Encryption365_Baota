@@ -20,6 +20,10 @@ QQ群: 709063775
 - CentOS
 - Ubuntu(测试中)
 
+### CentOS6、Debain8 请注意
+这两个系统我们目前测试到兼容性会存在问题，且暂时无法从插件代码入手进行兼容。如果您确实需要在CentOS6、Debain8系统的宝塔面板上安装插件，则必须要确保您的系统OpenSSL版本 >= 1.0.2b 版本, 否则将会因缺少部分OpenSSL API而无法正常使用。
+您也可以参考这篇文章将您系统的OpenSSL版本升级到较新的1.1.1a版本，请参考[《升级CentOS6/Debain8的OpenSSL版本到OpenSSL1.1.1a》](https://www.jianshu.com/p/c9b7a434b005)
+
 同时，您的宝塔面板还需要安装至少一个PHP7语言版本，PHP 版本需要 >= 7.1 。PHP 还需要开启下列这些扩展：
 - OpenSSL
 - cURL
