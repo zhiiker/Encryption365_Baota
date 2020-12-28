@@ -141,6 +141,7 @@ create unique index logs_id_uindex
             $shellContent = "#!/bin/bash
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
+export PYTHONIOENCODING=utf-8
 $pyEnv /www/server/panel/plugin/encryption365/src/AutoRenew.py
 echo \"----------------------------------------------------------------------------\"
 endDate=`date +\"%Y-%m-%d %H:%M:%S\"`
@@ -153,6 +154,10 @@ echo \"-------------------------------------------------------------------------
             $rootCronPath = "/var/spool/cron";
             if(!is_dir($rootCronPath)){
                 mkdir($rootCronPath, 472, true);
+            }
+            // Ubuntu系统可能路径不一致
+            if(is_dir($rootCronPath.'/crontabs')){
+                $rootCronPath .= '/crontabs';
             }
             $cronFile = $rootCronPath.'/root';
             $excuteLine = "*/1 * * * * /www/server/cron/$echo >> /www/server/cron/$echo.log 2>&1"."\n";
