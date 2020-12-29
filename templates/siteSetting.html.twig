@@ -303,11 +303,12 @@
 </div>
 <script>
     {% if ssl_order is not empty %}
-    {#let order_status = '{{ ssl_order.status }}';#}
-    {#if(order_status==='enroll_caprocessing'){#}
-    {#    let refJob = setInterval(function(){#}
-    {#        encryption365.checkSSLOrderStatus('{{ site.name }}', refJob);#}
-    {#    }, 2000);#}
-    {#}#}
+        // 页面自动检查和更新签发状态, 避免用户在此界面久等
+        let order_status = '{{ ssl_order.status }}';
+        if(order_status==='enroll_caprocessing'){
+            let refJob = setInterval(function(){
+                encryption365.checkSSLOrderStatus('{{ site.name }}', refJob);
+            }, 3000);
+        }
     {% endif %}
 </script>
