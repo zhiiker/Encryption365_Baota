@@ -289,8 +289,28 @@ class MainController{
         // 获取 Encryption365 证书订单
         $db = DatabaseUtils::initLocalDatabase();
         $order = $db->query("select * from certificate where site_id = ?", ($site['id']))->fetch();
-        if(isset($order->domains)){$order->domains = json_decode($order->domains);}
-        return $this->twig->render('siteSetting.html.twig', ['site'=>$site,'ssl_order'=>$order]);
+        if(isset($order->domains)){
+            $order->domains = json_decode($order->domains);
+        }
+
+        //检出域名验证信息
+        $dcvFormat = [];
+        $dcvInfo = json_decode($order->dcv_info, 1);
+        foreach ($dcvInfo as $domain => $info){
+            $hosta = explode('.', $info['dns_host']);
+            $dcvFormat['dns_host'] = $hosta[0];
+            $dcvFormat['dns_type'] = $info['dns_type'];
+            $dcvFormat['dns_value'] = $info['dns_value'];
+            $dcvFormat['http_path'] = str_replace('http://'.$domain, '', $info['http_verifylink']);
+            $dcvFormat['http_filename'] = $info['http_filename'];
+            $dcvFormat['http_filecontent'] = $info['http_filecontent'];
+            break;
+        }
+        return $this->twig->render('siteSetting.html.twig', [
+            'site'=>$site,
+            'ssl_order'=>$order,
+            'dcv_data'=>$dcvFormat,
+        ]);
     }
 
     /**
