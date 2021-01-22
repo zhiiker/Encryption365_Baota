@@ -27,6 +27,7 @@ Ubuntu 20.04 LTS(Py3.7.8)|7.4.7|>=7.1|√|√|√|
 Debian GNU/Linux 8(Py3.7.8)|7.4.7|>=7.1|√|×|×|OpenSSL不支持
 Debian GNU/Linux 9(Py3.7.8)|7.4.7|>=7.1|√|√|√|
 Debian GNU/Linux 10(Py3.7.8)|7.4.7|>=7.1|√|√|√|
+Aliyun 2.1903 (Hunting Beagle)(Py3.7.8)|Liunx Beta7.6.10|>=7.1|√|√|√| 由[@shiertx](https://github.com/shiertx)提供测试反馈
 
 ### CentOS6、Debain8 请注意
 这两个系统我们目前测试到兼容性会存在问题，且暂时无法从插件代码入手进行兼容。如果您确实需要在CentOS6、Debain8系统的宝塔面板上安装插件，则必须要确保您系统的OpenSSL版本 >= 1.0.2b 版本, 否则将会因缺少部分OpenSSL API而无法正常使用。
