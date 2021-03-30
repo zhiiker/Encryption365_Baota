@@ -1,4 +1,10 @@
 <?php
+/**
+ * https://github.com/londry/Encryption365_Baota/issues/11
+ * 禁用错误报告, 防止出现接口响应体异常
+ */
+error_reporting(0);
+
 //Boot Composer Loader
 require __DIR__.'/vendor/autoload.php';
 $pVersion = explode('.',PHP_VERSION);

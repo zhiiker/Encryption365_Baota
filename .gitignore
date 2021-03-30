@@ -6,3 +6,4 @@ vendor
 vendor/*
 /databases/main.db
 databases/main.db
+*.DS_Store
