@@ -2,6 +2,7 @@
 .idea
 .idea/*
 /.idea/*
-/.vendor
 vendor
 vendor/*
+/databases/main.db
+databases/main.db
