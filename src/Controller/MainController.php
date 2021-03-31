@@ -199,7 +199,7 @@ class MainController{
                     'updateDescription'=>$rep['update_description'],
                 ];
             }else{
-                return ['status' => "error"];
+//                return ['status' => "error"];
             }
         }catch (\Exception $e){
             return ['status'=>"error","message"=>'操作失败：'.$e->getMessage()];
