@@ -33,12 +33,16 @@ class MainController{
      */
     public function __construct()
     {
-        // 启动Twig引擎
-        $this->twig = TwigUtils::initTwig();
-        // 检查和初始化数据库
-        $this->checkAndInstallDatabase();
-        // 检查并设置自动化任务
-        DatabaseUtils::installCronJob();
+        try{
+            // 启动Twig引擎
+            $this->twig = TwigUtils::initTwig();
+            // 检查和初始化数据库
+            $this->checkAndInstallDatabase();
+            // 检查并设置自动化任务
+            DatabaseUtils::installCronJob();
+        }catch(\Exception $exception){
+           die($exception->getMessage());
+        }
     }
 
     /**
@@ -52,7 +56,7 @@ class MainController{
         $db = DatabaseUtils::initLocalDatabase();
         $checkAcc = $clientInfo = $db->query("select * from configuration where `setting` in ('client_id','access_token')")->fetchAll();
         if(empty($checkAcc)){
-            die($this->twig->render('getAccountWelcome.html.twig'));
+            die(json_encode($this->twig->render('getAccountWelcome.html.twig')));
         }
     }
 
@@ -558,7 +562,7 @@ class MainController{
     public function addFunds() {
         $details = Encryption365Service::getAccountDetails();
         if($details['result'] !== "success"){
-            throw new Encryption365PageException($details['message']);
+            return $details['message'];
         }
         return $this->twig->render('addFunds.html.twig',['account'=>$details]);
     }
