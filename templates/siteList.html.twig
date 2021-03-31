@@ -72,7 +72,6 @@
                         }
                     }
                 },
-
                 {"data":null,
                     render:function(row, index){
                         if(row.vhost_info.ssl_enabled === true){
@@ -85,7 +84,7 @@
                 {"data":null,
                     render: function(row, index){
                         if(row.vhost_info.ssl_enabled === false && row.ssl_order === null){
-                            return '<a href="javascript:;" class="btlink" onclick="encryption365.page(\'createSSLOrder\', {siteName: \''+row.name+'\'}, \'数据加载中\')">申请 SSL</a>';
+                            return '<a href="javascript:;" class="btlink" onclick="encryption365.page(\'createSSLOrder\', {siteName: \''+row.name+'\'}, \'数据加载中\')" style="color: #ff5722;">申请</a>';
                         }else{
                             return '<a href="javascript:;" class="btlink" onclick="encryption365.page(\'siteSetting\', {siteName: \''+row.name+'\'}, \'数据加载中\')">设置</a>';
                         }
