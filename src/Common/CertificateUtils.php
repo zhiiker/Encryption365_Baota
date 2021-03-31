@@ -267,18 +267,21 @@ class CertificateUtils {
             "stateOrProvinceName" => "Shaanxi",
             "countryName" => "CN",
         );
-
-        // Generate a new private (and public) key pair
-        if($is_ecc===FALSE){
-            $private_key = openssl_pkey_new( array('private_key_type'=>OPENSSL_KEYTYPE_RSA,'private_key_bits'=>2048) );
-            $csr_resource = openssl_csr_new($subject, $private_key, array('digest_alg'=>'sha256') );
-        }else{
-            $private_key = openssl_pkey_new( array('private_key_type'=>OPENSSL_KEYTYPE_EC,"curve_name" => 'prime256v1') );
-            $csr_resource = openssl_csr_new($subject, $private_key, array('digest_alg'=>'sha384') );
+        try{
+            // Generate a new private (and public) key pair
+            if($is_ecc===FALSE){
+                $private_key = openssl_pkey_new(array('private_key_type'=>OPENSSL_KEYTYPE_RSA,'private_key_bits'=>2048, 'config'=>__DIR__.'/../Config/openssl.cnf') );
+                $csr_resource = openssl_csr_new($subject, $private_key, array('digest_alg'=>'sha256', 'config'=>__DIR__.'/../Config/openssl.cnf') );
+            }else{
+                $private_key = openssl_pkey_new( array('private_key_type'=>OPENSSL_KEYTYPE_EC,"curve_name" => 'prime256v1', 'config'=>__DIR__.'/../Config/openssl.cnf') );
+                $csr_resource = openssl_csr_new($subject, $private_key, array('digest_alg'=>'sha384', 'config'=>__DIR__.'/../Config/openssl.cnf') );
+            }
+            openssl_csr_export($csr_resource, $csr_string);
+            openssl_pkey_export($private_key, $private_key_string);
+        }catch (\Exception $exception){
+            die($exception->getMessage());
         }
 
-        openssl_csr_export($csr_resource, $csr_string);
-        openssl_pkey_export($private_key, $private_key_string);
         return array(
             'csr_code'=>$csr_string,
             'key_code'=>$private_key_string
