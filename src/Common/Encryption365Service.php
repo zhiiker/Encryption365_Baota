@@ -210,6 +210,7 @@ class Encryption365Service {
         curl_setopt($curlHandle, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt ($curlHandle, CURLOPT_SSL_VERIFYPEER, TRUE);
         curl_setopt ($curlHandle, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt ($curlHandle, CURLOPT_CAINFO, __DIR__.'/../Config/cacert.pem');
         curl_setopt ($curlHandle, CURLOPT_POSTFIELDS, $postVars);
         curl_setopt($curlHandle, CURLOPT_USERAGENT, 'Encryption365-Client/'.self::getClientVersion().';BaotaPanel-LinuxVersion');
         curl_setopt($curlHandle, CURLOPT_HTTPHEADER, array(
@@ -230,7 +231,7 @@ class Encryption365Service {
         }else{
             return array(
                 "status"         =>  "error",
-                "message"       => "CURL ERROR, Please check your API call function",
+                "message"       => "CURL ERROR: ".curl_error($curlHandle),
             );
         }
     }

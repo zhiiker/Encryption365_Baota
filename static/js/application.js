@@ -110,6 +110,32 @@ var encryption365 = {
             }
         });
     },
+    removeSSLOrder: function(siteName) {
+        layer.confirm("确认删除此订单？取消订单后您可以重新为此站点配置申请新的SSL证书",{title:"删除证书订单",icon:0},function(t){
+            request_plugin('encryption365', 'removeSSLOrder', { siteName: siteName }, function (response) {
+                if(response.status !== "success"){
+                    layer.msg(response.message, {icon:2});
+                    return false;
+                }else{
+                    layer.msg(response.message, {icon:6});
+                    encryption365.page('siteSetting',{siteName: siteName});
+                }
+            });
+        });
+    },
+    recheckDomainValidation: function(siteName) {
+        layer.confirm("确认域名验证信息配置正确后, 执行此操作通知签发机构重新验证域名",{title:"重新验证",icon:0},function(t){
+            request_plugin('encryption365', 'recheckDomainValidation', { siteName: siteName }, function (response) {
+                if(response.status !== "success"){
+                    layer.msg(response.message, {icon:2});
+                    return false;
+                }else{
+                    layer.msg("提交完成, 颁发机构可能需要5分钟完成", {icon:6});
+                    encryption365.page('siteSetting',{siteName: siteName});
+                }
+            });
+        });
+    },
     toggleAutoRenewal: function(siteName) {
         request_plugin('encryption365', 'toggleAutoRenewal', { siteName: siteName }, function (response) {
             if(response.status !== "success"){
@@ -124,8 +150,23 @@ var encryption365 = {
         request_plugin('encryption365', 'checkSSLOrderStatus', { siteName: siteName }, function (response) {
             if(response.status === "success"){
                 layer.msg("证书已成功签发", {icon:1});
-                clearInterval(refJob); // 清除定时刷新任务
+                // clearInterval(refJob); // 清除定时刷新任务
                 encryption365.page('siteSetting',{siteName: siteName});
+            }else{
+                layer.msg("还未签发, 请检查域名验证信息是否设置正确", {icon: 5});
+            }
+        });
+    },
+    /**
+     * 检查客户端版本更新
+     * @param refJob
+     */
+    checkClientVersion: function(refJob) {
+        request_plugin('encryption365', 'checkUpdateVersion', {}, function (response) {
+            if(response.status === "success"){
+                refJob(response);
+            }else{
+                // layer.msg("检查版本更新失败, 您可尝试访问Github查看最新版本", {icon: 5});
             }
         });
     },
