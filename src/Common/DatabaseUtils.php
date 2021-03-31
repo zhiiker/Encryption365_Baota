@@ -187,7 +187,7 @@ echo \"-------------------------------------------------------------------------
     private static function findValidPythonExecutedPath() {
         // 根据优先级定义可用的Python路径
         $initPath = [
-            "C:\Program Files\python\python.exe", // Windows系统
+            '"C:\Program Files\python\python.exe"', // Windows系统
             NginxVhostUtils::getBtPanelPath()."/pyenv/bin/python", // Linux独立PythonEnv
             "/usr/bin/python", // Linux默认PyEnv
         ];

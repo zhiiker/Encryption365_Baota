@@ -8,3 +8,4 @@ vendor/*
 databases/main.db
 composer.lock
 *.DS_Store
+*.db

@@ -12,20 +12,9 @@
 # Encryption365 Uninstall.py
 # -----------------------------------------------------------------
 
-import re
-import fcntl
-import datetime
-import binascii
-import hashlib
-import base64
-import json
-import copy
-import time
 import os
 import sys
 import requests
-import json
-
 
 # 初始化获取面板运行路径
 def init_panel_path():
