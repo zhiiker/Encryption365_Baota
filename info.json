@@ -5,7 +5,7 @@
   "php": "index.php",
   "name": "encryption365",
   "ps": "更专业的 SSL 安全证书管理客户端, 免费自动化部署 SSL 证书, 可免费保护高达1000条域名和公网IPv4地址。支持大规模部署和集中化管理。",
-  "versions": "1.2",
+  "versions": "1.3",
   "checks": "/www/server/panel/plugin/encryption365",
   "author": "环智中诚™",
   "date":"2021-03-31",
