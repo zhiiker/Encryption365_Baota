@@ -482,3 +482,13 @@ table#sites>table>tbody>tr>td{
     border-top: none;
     border-bottom: 2px solid #fff;
 }
+.updater-container{
+    padding: 10px;
+    background: #ffeeec;
+    padding-left: 120px;
+    color: #ff1a09;
+}
+.updater-container>span{
+    font-weight: 600;
+    font-size: 1.3rem;
+}

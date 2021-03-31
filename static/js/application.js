@@ -157,6 +157,19 @@ var encryption365 = {
             }
         });
     },
+    /**
+     * 检查客户端版本更新
+     * @param refJob
+     */
+    checkClientVersion: function(refJob) {
+        request_plugin('encryption365', 'checkUpdateVersion', {}, function (response) {
+            if(response.status === "success"){
+                refJob(response);
+            }else{
+                layer.msg("检查版本更新失败, 您可尝试访问Github查看最新版本", {icon: 5});
+            }
+        });
+    },
     createOrganization: function(frm) {
         var loads = bt.load('正在保存...');
         request_plugin('encryption365', 'createNewOrganization', $(frm).serialize(), function (response) {

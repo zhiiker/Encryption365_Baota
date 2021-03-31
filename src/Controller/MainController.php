@@ -185,6 +185,28 @@ class MainController{
     }
 
     /**
+     * 检查最新的客户端版本
+     * @return array
+     */
+    public function checkUpdateVersion() {
+        try{
+            $localVersion = Encryption365Service::getClientVersion();
+            $rep = Encryption365Service::checkUpdateVersion();
+            if(isset($rep['latest_version']) && $rep['latest_version'] > $localVersion){
+                return [
+                    'status'=>'success',
+                    'updateVersion'=>$rep['latest_version'],
+                    'updateDescription'=>$rep['update_description'],
+                ];
+            }else{
+                return ['status' => "error"];
+            }
+        }catch (\Exception $e){
+            return ['status'=>"error","message"=>'操作失败：'.$e->getMessage()];
+        }
+    }
+
+    /**
      * @return array|string
      */
     public function getOrgTemplateList() {

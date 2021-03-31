@@ -96,6 +96,14 @@ class Encryption365Service {
     }
 
     /**
+     * 获取最新的版本更新信息
+     * @return array|mixed
+     */
+    public static function checkUpdateVersion() {
+        return self::callAPI('/client/version', array_merge(self::getClientLoginDetails(),array()));
+    }
+
+    /**
      * 发送注册验证码
      * @param $email
      * @return array|mixed

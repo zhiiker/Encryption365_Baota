@@ -1,5 +1,5 @@
 {
-  "title": "Encryption365™ 免费证书",
+  "title": "Encryption365 SSL 证书",
   "tip":"lib",
   "type":"扩展",
   "php": "index.php",
@@ -8,7 +8,7 @@
   "versions": "1.2",
   "checks": "/www/server/panel/plugin/encryption365",
   "author": "环智中诚™",
-  "date":"2020-05-01",
+  "date":"2021-03-31",
   "home": "https://www.trustocean.com",
   "default":false,
   "display":1
