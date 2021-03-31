@@ -25,10 +25,10 @@ import os
 import sys
 import requests
 import json
+import Uninstall as UtiMod
 
-sys.path.append(os.getcwd())
-sys.path.append('/www/server/panel')
-os.chdir('/www/server/panel')
+panelPath = UtiMod.init_panel_path()
+
 if not 'class/' in sys.path:
     sys.path.insert(0, 'class/')
 requests.DEFAULT_TYPE = 'curl'
@@ -106,12 +106,12 @@ class encryption365:
 
 
 def get_database():
-    conn = sqlite3.connect('/www/server/panel/plugin/encryption365/databases/main.db')
+    conn = sqlite3.connect(panelPath+'/plugin/encryption365/databases/main.db')
     return conn
 
 
 def get_baota_database():
-    conn = sqlite3.connect('/www/server/panel/data/default.db')
+    conn = sqlite3.connect(panelPath+'/data/default.db')
     return conn
 
 
@@ -164,7 +164,7 @@ def get_site_info(siteId):
 # 调用宝塔面板API设置站点证书
 def plug_cert_to_site(siteId, certId, certData):
     s = get_site_info(siteId)
-    basePath = '/www/server/panel/vhost/cert/' + s[2]
+    basePath = panelPath+'/vhost/cert/' + s[2]
     if not os.path.exists(basePath):
         os.makedirs(basePath, 384)
     lCert = get_local_cert(certId)
@@ -232,7 +232,7 @@ def get_processing_orders():
 def renew_site_ssl(cert_order_id):
     print("正在调用PHP API执行订单续费...#"+str(cert_order_id))
     try:
-        result = os.popen("/usr/bin/php /www/server/panel/plugin/encryption365/src/PythonUtils.php --fun=\"%s\" --cert_order_id=\"%s\"" %
+        result = os.popen("/usr/bin/php "+panelPath+"/plugin/encryption365/src/PythonUtils.php --fun=\"%s\" --cert_order_id=\"%s\"" %
                           ('renewSSLOrder',str(cert_order_id))).read()
         result = json.loads(result)
         print("续费订单提交成功， 站点#"+str(cert_order_id))
@@ -299,18 +299,18 @@ def process_cert_renewal():
 
 # 写此程序PID
 def write_pid():
-    if not os.path.exists('/www/server/panel/plugin/encryption365/src/autorenewal.pid'):
-        with open('/www/server/panel/plugin/encryption365/src/autorenewal.pid', 'w') as fs:
+    if not os.path.exists(panelPath+'/plugin/encryption365/src/autorenewal.pid'):
+        with open(panelPath+'/plugin/encryption365/src/autorenewal.pid', 'w') as fs:
             fs.write(str(os.getpid()))
     else:
-        with open('/www/server/panel/plugin/encryption365/src/autorenewal.pid', 'w') as f:
+        with open(panelPath+'/plugin/encryption365/src/autorenewal.pid', 'w') as f:
             f.write(str(os.getpid()))
 
 
 # 读取本程序PID
 def read_pid():
-    if os.path.exists('/www/server/panel/plugin/encryption365/src/autorenewal.pid'):
-        with open('/www/server/panel/plugin/encryption365/src/autorenewal.pid', 'r') as f:
+    if os.path.exists(panelPath+'/plugin/encryption365/src/autorenewal.pid'):
+        with open(panelPath+'/plugin/encryption365/src/autorenewal.pid', 'r') as f:
             return f.read()
     else:
         return '0'

@@ -26,12 +26,29 @@ import sys
 import requests
 import json
 
-sys.path.append(os.getcwd())
-sys.path.append('/www/server/panel')
-os.chdir('/www/server/panel')
+
+# 初始化获取面板运行路径
+def init_panel_path():
+    if os.path.isdir("/www/server/panel"):
+        panel_path = "/www/server/panel"
+    elif os.path.isdir(os.getenv('BT_PANEL')):
+        panel_path = os.getenv('BT_PANEL')
+    else:
+        panel_path = "/www/server/panel"
+        public.bt_print("出错了, 因为系统查找BT-Panel主目录失败, 可能是因为您使用了自定义的目录或当前系统版本不支持")
+    sys.path.append(os.getcwd())
+    sys.path.append(panel_path)
+    os.chdir(panel_path)
+    return panel_path
+
+
+panelPath = init_panel_path()
+
+
 if not 'class/' in sys.path:
     sys.path.insert(0, 'class/')
 requests.DEFAULT_TYPE = 'curl'
+from shutil import copyfile
 
 try:
     import public
@@ -81,17 +98,20 @@ except:
 
 
 def get_baota_database():
-    conn = sqlite3.connect('/www/server/panel/data/default.db')
+    conn = sqlite3.connect(panelPath+'/data/default.db')
     return conn
+
+
 def get_setup_path():
     db = get_baota_database().cursor()
     c = db.execute('select `id` from crontab where `echo` = "5eeb48072b7a0fc713483bd5ade1d59d"')
     cron_id = c.fetchall()[0][0]
 
+
 def uninstall():
-    # 备份数据库文件至目录 ${setup_path}/panel/data/plugin_encryption365_backup.db
+    # 备份数据库文件至目录 ${panelPath}/data/plugin_encryption365_backup.db
     # 防止证书数据丢失, 待下次安装/升级插件时自动导入旧的数据库文件
-    public.ExecShell('cp -f /www/server/panel/plugin/encryption365/databases/main.db /www/server/panel/data/plugin_encryption365_backup.db')
+    copyfile(panelPath+'/plugin/encryption365/databases/main.db', panelPath+'/data/plugin_encryption365_backup.db')
     print('已完成数据库备份')
     # 调用Baota API删除已创建的CronTab
     db = get_baota_database().cursor()

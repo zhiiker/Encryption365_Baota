@@ -6,6 +6,21 @@ use TrustOcean\Encryption365\Encryption365Exception;
 class NginxVhostUtils {
 
     /**
+     * 获取宝塔面板的安装路径
+     * @return array|false|string
+     */
+    public static function getBtPanelPath()
+    {
+        if(is_dir("/www/server/panel")){
+            return "/www/server/panel";
+        }elseif(is_dir(getenv("BT_PANEL"))){
+            return getenv("BT_PANEL");
+        }else{
+            return "/www/server/panel";
+        }
+    }
+
+    /**
      * 系统默认的配置文件路径, 这里默认选择Nginx目录
      * @return string
      */
@@ -15,7 +30,7 @@ class NginxVhostUtils {
         $db = DatabaseUtils::initBaoTaSystemDatabase();
         $ch = $db->query("select `webserver` from config where id =1")->fetch();
         $webserver = $ch['webserver'];
-        return "/www/server/panel/vhost/$webserver/";
+        return self::getBtPanelPath()."/vhost/$webserver/";
     }
 
     /**

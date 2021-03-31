@@ -133,37 +133,48 @@ create unique index logs_id_uindex
                 'save'=>"",
                 'sName'=>"",
                 'backupTo'=>"localhost",
-                'sBody'=>"$pyEnv  /www/server/panel/plugin/encryption365/src/AutoRenew.py",
+                'sBody'=>"$pyEnv  ".NginxVhostUtils::getBtPanelPath()."/plugin/encryption365/src/AutoRenew.py",
                 'sType'=>'toShell',
                 'urladdress'=>"",
             ]);
-            // 写入宝塔任务
-            $shellContent = "#!/bin/bash
+
+            // Windows系统
+            if(is_dir(NginxVhostUtils::getBtPanelPath())){
+                // 写入宝塔任务
+                $shellContent = "$pyEnv ".NginxVhostUtils::getBtPanelPath()."/plugin/encryption365/src/AutoRenew.py >>".NginxVhostUtils::getBtPanelPath()."/../cron/$echo.log 2>&1 && echo ----------------------------------------------------------------------------  >> ".NginxVhostUtils::getBtPanelPath()."/../cron/$echo.log 2>&1 && echo %date%  %time%  Successful >> ".NginxVhostUtils::getBtPanelPath()."/../cron/$echo.log 2>&1 && echo ----------------------------------------------------------------------------";
+                if(!is_dir(NginxVhostUtils::getBtPanelPath()."/../cron/")){mkdir(NginxVhostUtils::getBtPanelPath()."/../cron/");}
+                $baseShell = NginxVhostUtils::getBtPanelPath()."/../cron/".$echo;
+                file_put_contents($baseShell,str_replace("\r\n","\n", $shellContent));
+            }else{
+                // 非Windows系统
+                // 写入宝塔任务
+                $shellContent = "#!/bin/bash
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 export PYTHONIOENCODING=utf-8
-$pyEnv /www/server/panel/plugin/encryption365/src/AutoRenew.py
+$pyEnv ".NginxVhostUtils::getBtPanelPath()."/plugin/encryption365/src/AutoRenew.py
 echo \"----------------------------------------------------------------------------\"
 endDate=`date +\"%Y-%m-%d %H:%M:%S\"`
 echo \"★[\$endDate] Successful\"
 echo \"----------------------------------------------------------------------------\"";
-            if(!is_dir("/www/server/cron/")){mkdir("/www/server/cron/");}
-            $baseShell = "/www/server/cron/".$echo;
-            file_put_contents($baseShell,str_replace("\r\n","\n", $shellContent));
-            // 写Cron WriteShell
-            $rootCronPath = "/var/spool/cron";
-            if(!is_dir($rootCronPath)){
-                mkdir($rootCronPath, 472, true);
+                if(!is_dir(NginxVhostUtils::getBtPanelPath()."/../cron/")){mkdir(NginxVhostUtils::getBtPanelPath()."/../cron/");}
+                $baseShell = NginxVhostUtils::getBtPanelPath()."/../cron/".$echo;
+                file_put_contents($baseShell,str_replace("\r\n","\n", $shellContent));
+                // 写Cron WriteShell
+                $rootCronPath = "/var/spool/cron";
+                if(!is_dir($rootCronPath)){
+                    mkdir($rootCronPath, 472, true);
+                }
+                // Ubuntu系统可能路径不一致
+                if(is_dir($rootCronPath.'/crontabs')){
+                    $rootCronPath .= '/crontabs';
+                }
+                $cronFile = $rootCronPath.'/root';
+                $excuteLine = "*/1 * * * * ".NginxVhostUtils::getBtPanelPath()."/../cron/$echo >> ".NginxVhostUtils::getBtPanelPath()."/../cron/$echo.log 2>&1"."\n";
+                file_put_contents($cronFile, $excuteLine, FILE_APPEND);
+                // 设置权限
+                chmod($baseShell, 755);
             }
-            // Ubuntu系统可能路径不一致
-            if(is_dir($rootCronPath.'/crontabs')){
-                $rootCronPath .= '/crontabs';
-            }
-            $cronFile = $rootCronPath.'/root';
-            $excuteLine = "*/1 * * * * /www/server/cron/$echo >> /www/server/cron/$echo.log 2>&1"."\n";
-            file_put_contents($cronFile, $excuteLine, FILE_APPEND);
-            // 设置权限
-            chmod($baseShell, 755);
             self::reloadCrond();
             LogUtils::writeLog('success','cron_setup','设置定时任务成功PythonEnv: '.$pyEnv.'');
         }
@@ -176,8 +187,9 @@ echo \"-------------------------------------------------------------------------
     private static function findValidPythonExecutedPath() {
         // 根据优先级定义可用的Python路径
         $initPath = [
-            "/www/server/panel/pyenv/bin/python",
-            "/usr/bin/python",
+            "C:\Program Files\python\python.exe", // Windows系统
+            NginxVhostUtils::getBtPanelPath()."/pyenv/bin/python", // Linux独立PythonEnv
+            "/usr/bin/python", // Linux默认PyEnv
         ];
         foreach ($initPath as $pyenv){
             if(file_exists($pyenv) && is_executable($pyenv)){

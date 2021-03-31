@@ -17,9 +17,10 @@ import sys
 import requests
 import getopt
 
-sys.path.append(os.getcwd())
-sys.path.append('/www/server/panel')
-os.chdir('/www/server/panel')
+import Uninstall as UtiMod
+
+panelPath = UtiMod.init_panel_path()
+
 if not 'class/' in sys.path:
     sys.path.insert(0, 'class/')
 requests.DEFAULT_TYPE = 'curl'
