@@ -142,6 +142,17 @@ class Encryption365Service {
     }
 
     /**
+     * 重新执行域名验证
+     * @param $vendor_id
+     * @return array|mixed
+     */
+    public static function certReValidation($vendor_id) {
+        return self::callAPI('/cert/challenge', array_merge(self::getClientLoginDetails(),array(
+            'trustocean_id'=>$vendor_id
+        )));
+    }
+
+    /**
      * 获取本地客户端版本
      * @return string
      */

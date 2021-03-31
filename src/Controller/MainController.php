@@ -165,6 +165,26 @@ class MainController{
     }
 
     /**
+     * 重新执行域名验证
+     * @return array
+     */
+    public function recheckDomainValidation() {
+        try{
+            $site = SiteRep::getSiteInfo(_post('siteName'));
+            $db = DatabaseUtils::initLocalDatabase();
+            // 查询当前状态
+            $order = $db->query("select * from certificate where site_id = ?", ($site['id']))->fetch();
+            if(empty($order)){
+                return  ['status'=>'error','message'=>"不存在对应的证书订单"];
+            }
+            // 执行远端的API订单验证检查
+            return Encryption365Service::certReValidation($order->vendor_id);
+        }catch (\Exception $e){
+            return ['status'=>"error","message"=>'操作失败：'.$e->getMessage()];
+        }
+    }
+
+    /**
      * @return array|string
      */
     public function getOrgTemplateList() {

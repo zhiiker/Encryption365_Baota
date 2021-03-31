@@ -123,6 +123,19 @@ var encryption365 = {
             });
         });
     },
+    recheckDomainValidation: function(siteName) {
+        layer.confirm("确认域名验证信息配置正确后, 执行此操作通知签发机构重新验证域名",{title:"重新验证",icon:0},function(t){
+            request_plugin('encryption365', 'recheckDomainValidation', { siteName: siteName }, function (response) {
+                if(response.status !== "success"){
+                    layer.msg(response.message, {icon:2});
+                    return false;
+                }else{
+                    layer.msg("提交完成, 颁发机构可能需要5分钟完成", {icon:6});
+                    encryption365.page('siteSetting',{siteName: siteName});
+                }
+            });
+        });
+    },
     toggleAutoRenewal: function(siteName) {
         request_plugin('encryption365', 'toggleAutoRenewal', { siteName: siteName }, function (response) {
             if(response.status !== "success"){
