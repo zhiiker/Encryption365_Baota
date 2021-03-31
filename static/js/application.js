@@ -166,7 +166,7 @@ var encryption365 = {
             if(response.status === "success"){
                 refJob(response);
             }else{
-                // layer.msg("检查版本更新失败, 您可尝试访问Github查看最新版本", {icon: 5});
+                layer.msg("检查版本更新失败, 您可尝试访问Github查看最新版本", {icon: 5});
             }
         });
     },

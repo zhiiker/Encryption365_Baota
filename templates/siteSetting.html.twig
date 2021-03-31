@@ -56,7 +56,14 @@
     </tr>
     </tbody>
 </table>
-
+{# 站点订单操作 #}
+{% if ssl_order is not empty  and ssl_order.status is same as('enroll_caprocessing')%}
+<div style="margin-top: 1rem; background: #ffffff; padding: 10px 0px; border: 1px solid #ddd;">
+    <button onclick="javascript:encryption365.checkSSLOrderStatus('{{ site.name }}');" class="btn btn-info btn-sm" title="检查签发状态" style="margin-left: 1rem;"><i class="glyphicon glyphicon-refresh"></i> 检查签发状态</button>
+    <button onclick="javascript:encryption365.recheckDomainValidation('{{ site.name }}');" class="btn btn-info btn-sm" title="重新执行验证" style="margin-left: 1rem;"><i class="glyphicon glyphicon-refresh"></i> 重新执行验证</button>
+    <button onclick="javascript:encryption365.removeSSLOrder('{{ site.name }}');" class="btn btn-warning btn-sm" title="删除证书订单" style="margin-left: 1rem;"><i class="glyphicon glyphicon-remove"></i> 删除证书订单</button>
+</div>
+{% endif %}
 {# 其他信息和业务操作 #}
 <div class="row enc365-row">
     {#一些通知信息和交互操作#}
@@ -158,10 +165,48 @@
             {% if site.vhost_info.ssl_enabled is same as(true) %}
                 <li role="presentation" {% if ssl_order is empty and (site.insecure_domains is empty or site.vhost_info.cert_info is not empty) %}class="active"{% endif %}><a href="#certDetails" aria-controls="profile" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-equalizer"></i> 证书信息</a></li>
                 <li role="presentation" {% if ssl_order.status is same as('issued_active') and site.insecure_domains is not empty %}class="active"{% endif %}><a href="#secureDetails" aria-controls="messages" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-globe"></i> 域名加密状态</a></li>
+                {% if ssl_order.status is same as('issued_active') %}
+                    <li role="presentation">
+                        <a href="#keyCode" aria-controls="messages" role="tab" data-toggle="tab">
+                            <i class="glyphicon glyphicon-cog"></i> 私钥(KEY)
+                        </a>
+                    </li>
+                {% endif %}
+                {% if ssl_order.status is same as('issued_active') %}
+                    <li role="presentation">
+                        <a href="#certCode" aria-controls="messages" role="tab" data-toggle="tab">
+                            <i class="glyphicon glyphicon-cog"></i> 证书代码
+                        </a>
+                    </li>
+                {% endif %}
+                {% if ssl_order.status is same as('issued_active') %}
+                    <li role="presentation">
+                        <a href="#csrCode" aria-controls="messages" role="tab" data-toggle="tab">
+                            <i class="glyphicon glyphicon-cog"></i> CSR代码
+                        </a>
+                    </li>
+                {% endif %}
             {% endif %}
         </ul>
         <!-- Tab panes -->
         <div class="tab-content">
+            {% if ssl_order.status is same as('issued_active') %}
+            <div role="tabpanel" class="tab-pane" id="csrCode">
+                <div class="col-md-12" style="padding: 0px;">
+                    <pre style="border-top: none; border-radius: 0px; background: white;">{{ ssl_order.csr_code }}</pre>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="certCode">
+                <div class="col-md-12" style="padding: 0px;">
+                    <pre style="border-top: none; border-radius: 0px; background: white;">{{ ssl_order.cert_code }}</pre>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="keyCode">
+                <div class="col-md-12" style="padding: 0px;">
+                    <pre style="border-top: none; border-radius: 0px; background: white;">{{ ssl_order.key_code }}</pre>
+                </div>
+            </div>
+            {% endif %}
             {% if ssl_order is not empty %}
                 <div role="tabpanel" class="tab-pane {% if site.insecure_domains is empty or ssl_order.status is same as('enroll_caprocessing')%}active{% endif %}" id="orderDetails">
                     <div class="col-md-12" style="padding: 0px;">

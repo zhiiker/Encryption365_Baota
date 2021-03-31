@@ -7,3 +7,4 @@ vendor/*
 /databases/main.db
 databases/main.db
 composer.lock
+*.DS_Store

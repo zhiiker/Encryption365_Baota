@@ -43,6 +43,17 @@
                 {% endfor %}
             </div>
         </div>
+        <div class="line" style="padding-top: 0px;">
+            <div class="to_tvalue" style="height: auto;">
+                <div>网站域名</div>
+                {% if site.site_domains is not empty %}
+                    <textarea disabled style="padding: 5px 10px;margin: 0px; width: 100%; height: 116px; line-height: 18px; border: 1px solid rgb(221, 221, 221);">{% for domain in site.site_domains %}{{ domain }}
+{% endfor %}</textarea>
+                {% else %}
+                    暂无域名
+                {% endif %}
+            </div>
+        </div>
 
         <div class="line" id="orgSelection" style="margin-top: 15px;display: none;">
             <span class="to_tvalue" style="height: auto;">
@@ -68,17 +79,6 @@
 {#            <span class="tname">网站目录</span>#}
 {#            <span class="to_tvalue" style="height: auto; word-break: break-all; padding-left: 100px;"><span class="glyphicon glyphicon-folder-open enc365-icon-folder" onclick="encryption365.openPath('{{ site.path }}')"></span>  {{ site.path }}</span>#}
 {#        </div>#}
-        <div class="line" style="padding-top: 0px;">
-            <div class="to_tvalue" style="height: auto;">
-                <div>网站域名</div>
-                {% if site.site_domains is not empty %}
-                    <textarea style="padding: 5px 10px;margin: 0px; width: 100%; height: 116px; line-height: 18px; border: 1px solid rgb(221, 221, 221);" disabled>{% for domain in site.site_domains %}{{ domain }}
-{% endfor %}</textarea>
-                {% else %}
-                    暂无域名
-                {% endif %}
-            </div>
-        </div>
         <div class="line">
             <span class="to_tvalue to-domain-ans" style="height: auto;font-weight: 500;margin-left: 0px">
                 <div>费用详情</div>

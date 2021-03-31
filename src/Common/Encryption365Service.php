@@ -96,6 +96,14 @@ class Encryption365Service {
     }
 
     /**
+     * 获取最新的版本更新信息
+     * @return array|mixed
+     */
+    public static function checkUpdateVersion() {
+        return self::callAPI('/client/version', array_merge(self::getClientLoginDetails(),array()));
+    }
+
+    /**
      * 发送注册验证码
      * @param $email
      * @return array|mixed
@@ -137,6 +145,17 @@ class Encryption365Service {
      */
     public static function certDetails($vendor_id) {
         return self::callAPI('/cert/details', array_merge(self::getClientLoginDetails(),array(
+            'trustocean_id'=>$vendor_id
+        )));
+    }
+
+    /**
+     * 重新执行域名验证
+     * @param $vendor_id
+     * @return array|mixed
+     */
+    public static function certReValidation($vendor_id) {
+        return self::callAPI('/cert/challenge', array_merge(self::getClientLoginDetails(),array(
             'trustocean_id'=>$vendor_id
         )));
     }

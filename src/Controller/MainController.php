@@ -153,6 +153,64 @@ class MainController{
     }
 
     /**
+     * 移除证书订单
+     * @return array
+     */
+    public function removeSSLOrder()
+    {
+        try{
+            $site = SiteRep::getSiteInfo(_post('siteName'));
+            $db = DatabaseUtils::initLocalDatabase();
+            $db->query('delete from certificate where site_id = ?', $site['id']);
+            return ['status'=>"success","message"=>"订单删除成功"];
+        }catch (\Exception $e){
+            return ['status'=>"error","message"=>'删除订单时出错：'.$e->getMessage()];
+        }
+    }
+
+    /**
+     * 重新执行域名验证
+     * @return array
+     */
+    public function recheckDomainValidation() {
+        try{
+            $site = SiteRep::getSiteInfo(_post('siteName'));
+            $db = DatabaseUtils::initLocalDatabase();
+            // 查询当前状态
+            $order = $db->query("select * from certificate where site_id = ?", ($site['id']))->fetch();
+            if(empty($order)){
+                return  ['status'=>'error','message'=>"不存在对应的证书订单"];
+            }
+            // 执行远端的API订单验证检查
+            return Encryption365Service::certReValidation($order->vendor_id);
+        }catch (\Exception $e){
+            return ['status'=>"error","message"=>'操作失败：'.$e->getMessage()];
+        }
+    }
+
+    /**
+     * 检查最新的客户端版本
+     * @return array
+     */
+    public function checkUpdateVersion() {
+        try{
+            $localVersion = Encryption365Service::getClientVersion();
+            $rep = Encryption365Service::checkUpdateVersion();
+            if(isset($rep['latest_version']) && $rep['latest_version'] > $localVersion){
+                return [
+                    'status'=>'success',
+                    'updateVersion'=>$rep['latest_version'],
+                    'updateDescription'=>$rep['update_description'],
+                ];
+            }else{
+//                return ['status' => "error"];
+            }
+        }catch (\Exception $e){
+            return ['status'=>"error","message"=>'操作失败：'.$e->getMessage()];
+        }
+    }
+
+    /**
      * @return array|string
      */
     public function getOrgTemplateList() {
