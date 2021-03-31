@@ -110,6 +110,19 @@ var encryption365 = {
             }
         });
     },
+    removeSSLOrder: function(siteName) {
+        layer.confirm("确认删除此订单？取消订单后您可以重新为此站点配置申请新的SSL证书",{title:"删除证书订单",icon:0},function(t){
+            request_plugin('encryption365', 'removeSSLOrder', { siteName: siteName }, function (response) {
+                if(response.status !== "success"){
+                    layer.msg(response.message, {icon:2});
+                    return false;
+                }else{
+                    layer.msg(response.message, {icon:6});
+                    encryption365.page('siteSetting',{siteName: siteName});
+                }
+            });
+        });
+    },
     toggleAutoRenewal: function(siteName) {
         request_plugin('encryption365', 'toggleAutoRenewal', { siteName: siteName }, function (response) {
             if(response.status !== "success"){
@@ -124,8 +137,10 @@ var encryption365 = {
         request_plugin('encryption365', 'checkSSLOrderStatus', { siteName: siteName }, function (response) {
             if(response.status === "success"){
                 layer.msg("证书已成功签发", {icon:1});
-                clearInterval(refJob); // 清除定时刷新任务
+                // clearInterval(refJob); // 清除定时刷新任务
                 encryption365.page('siteSetting',{siteName: siteName});
+            }else{
+                layer.msg("还未签发, 请检查域名验证信息是否设置正确", {icon: 5});
             }
         });
     },

@@ -149,6 +149,22 @@ class MainController{
     }
 
     /**
+     * 移除证书订单
+     * @return array
+     */
+    public function removeSSLOrder()
+    {
+        try{
+            $site = SiteRep::getSiteInfo(_post('siteName'));
+            $db = DatabaseUtils::initLocalDatabase();
+            $db->query('delete from certificate where site_id = ?', $site['id']);
+            return ['status'=>"success","message"=>"订单删除成功"];
+        }catch (\Exception $e){
+            return ['status'=>"error","message"=>'删除订单时出错：'.$e->getMessage()];
+        }
+    }
+
+    /**
      * @return array|string
      */
     public function getOrgTemplateList() {

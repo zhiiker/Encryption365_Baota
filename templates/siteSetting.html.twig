@@ -56,7 +56,13 @@
     </tr>
     </tbody>
 </table>
-
+{# 站点订单操作 #}
+{% if ssl_order is not empty  and ssl_order.status is same as('enroll_caprocessing')%}
+<div style="margin-top: 1rem; background: #ffffff; padding: 10px 0px; border: 1px solid #ddd;">
+    <button onclick="javascript:encryption365.checkSSLOrderStatus('{{ site.name }}');" class="btn btn-info btn-sm" title="检查签发状态" style="margin-left: 1rem;"><i class="glyphicon glyphicon-refresh"></i> 检查签发状态</button>
+    <button onclick="javascript:encryption365.removeSSLOrder('{{ site.name }}');" class="btn btn-warning btn-sm" title="删除证书订单" style="margin-left: 1rem;"><i class="glyphicon glyphicon-remove"></i> 删除证书订单</button>
+</div>
+{% endif %}
 {# 其他信息和业务操作 #}
 <div class="row enc365-row">
     {#一些通知信息和交互操作#}
