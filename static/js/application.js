@@ -163,7 +163,7 @@ var encryption365 = {
      */
     checkClientVersion: function(refJob) {
         request_plugin('encryption365', 'checkUpdateVersion', {}, function (response) {
-            if(response.status === "success"){
+            if(null !== response && response.status === "success"){
                 refJob(response);
             }else{
                 // layer.msg("检查版本更新失败, 您可尝试访问Github查看最新版本", {icon: 5});

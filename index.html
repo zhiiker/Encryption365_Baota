@@ -62,7 +62,7 @@
         // 动态监测版本更新
         encryption365.checkClientVersion(function(res){
             console.log(res);
-            if(res.status === "success"){
+            if(undefined !== res.status && res.status === "success"){
                 $('#update-version').html(res.updateVersion);
                 $('#update-description').html(res.updateDescription);
                 $('.updater-container').show();
