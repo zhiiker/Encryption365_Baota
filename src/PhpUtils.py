@@ -29,12 +29,12 @@ from panelSite import *
 
 # 获取站点SSL信息
 def get_ssl(optionalData=""):
-    print(json.dumps(panelSite().GetSSL(DictObj(optionalData))))
+    print(json.dumps(panelSite().GetSSL(DictObj(optionalData)), ensure_ascii=False))
 
 
 # 获取IISSiteInfo
 def get_iis_site_info(optionalData=""):
-    print(json.dumps(panelSite().get_site_info(siteName = optionalData["siteName"])))
+    print(json.dumps(panelSite().get_site_info(siteName = optionalData["siteName"]), ensure_ascii=False))
 
 
 

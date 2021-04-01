@@ -134,6 +134,9 @@ class NginxVhostUtils {
             $site_path = $ch['path'];
             $config_path = "$run_path/web.config";
             $ssl_info = self::callPython('get_ssl', ['siteName'=>$siteName]);
+            var_dump($ssl_info);
+            die();
+
             $cert_info = [];
             // 格式转换PFX
             if(file_exists($cert_file)){
@@ -181,7 +184,9 @@ class NginxVhostUtils {
      */
     public static function callPython($func, $data=[]){
         $cmd = DatabaseUtils::findValidPythonExecutedPath()." ".realpath(__DIR__."/../PhpUtils.py")." -f $func -d ".str_replace('"','\"', json_encode($data));
-        exec($cmd, $rcc);
+//        die($cmd);
+        exec($cmd, $rcc, $res);
+        die(json_encode($rcc));
         return json_decode($rcc[0]);
     }
 
