@@ -31,9 +31,9 @@ Aliyun 2.1903 (Hunting Beagle)(Py3.7.8)|Liunx Beta7.6.10|>=7.1|√|√|√| 由[
 
 ## Windows Server 系统支持情况
 
-操作系统/Python版本 | 宝塔版本 | PHP版本 | 安装插件 | 定时任务 | 证书申请 | IIS | Nginx | Apache | 测试信息
+操作系统/Python版本 | 宝塔版本 | PHP版本 | IIS | Nginx | Apache | 测试信息
  --- | --- |---|---|---|---|---|---|---|---
-Windows Server 2012 R2 Datacenter (build 9600) x64 (Py3.8.6)|7.1.0|>=7.1| √ | √|√|√| 待修复 | 待修复 |
+Windows Server 2012 R2 Datacenter (build 9600) x64 (Py3.8.6)|7.1.0|>=7.1|√| 待修复 | 待修复 |
 
 
 
