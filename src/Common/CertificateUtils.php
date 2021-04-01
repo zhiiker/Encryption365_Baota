@@ -39,9 +39,6 @@ class CertificateUtils {
         }
         //TODO 创建CSR和KEY
         $newCsrAndKey = self::generateKeyPair($domains[0], FALSE); // 创建CSR，默认申请RSA证书
-
-        die(json_encode($newCsrAndKey));
-
         //TODO 准备创建订单
         $orderRlt = Encryption365Service::certCreate($pid, $product['period'], $newCsrAndKey['csr_code'], $domains, $org_id);
         if($orderRlt['result'] !== "success"){
