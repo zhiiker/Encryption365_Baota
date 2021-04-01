@@ -29,6 +29,14 @@ Debian GNU/Linux 9(Py3.7.8)|7.4.7|>=7.1|√|√|√|
 Debian GNU/Linux 10(Py3.7.8)|7.4.7|>=7.1|√|√|√|
 Aliyun 2.1903 (Hunting Beagle)(Py3.7.8)|Liunx Beta7.6.10|>=7.1|√|√|√| 由[@shiertx](https://github.com/shiertx)提供测试反馈
 
+## Windows Server 系统支持情况
+
+操作系统/Python版本 | 宝塔版本 | PHP版本 | 安装插件 | 定时任务 | 证书申请 | IIS | Nginx | Apache | 测试信息
+ --- | --- |---|---|---|---|---|---|---|---
+Windows Server 2012 R2 Datacenter (build 9600) x64 (Py3.8.6)|7.1.0|>=7.1| √ | √|√|√| 待修复 | 待修复 |
+
+
+
 ### CentOS6、Debain8 请注意
 这两个系统我们目前测试到兼容性会存在问题，且暂时无法从插件代码入手进行兼容。如果您确实需要在CentOS6、Debain8系统的宝塔面板上安装插件，则必须要确保您系统的OpenSSL版本 >= 1.0.2b 版本, 否则将会因缺少部分OpenSSL API而无法正常使用。
 经过测试，即便是在安装完插件后，将系统OpenSSL升级到1.1.1a版本，依然会出现不兼容，请考虑在更加新版本的系统中安装和使用。
