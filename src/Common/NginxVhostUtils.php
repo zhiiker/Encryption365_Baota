@@ -95,7 +95,7 @@ class NginxVhostUtils {
         # 网站主目录
         $db = DatabaseUtils::initBaoTaSystemDatabase();
         $ch = $db->query("select `path` from sites where name = ?", $siteName)->fetch();
-        $root = $ch['path'];
+        $root = $ch->path;
         return self::findSubdirsWebPath($root);
     }
 
@@ -110,13 +110,11 @@ class NginxVhostUtils {
         }else{
             $dirs = scandir($path);
             foreach ($dirs as $key => $dir){
-                if(!in_array($dir, ['.','..'])){
-                    if(file_exists("$dir/web.config")){
+                if(is_dir("$path/$dir") && !in_array($dir, ['.','..'])){
+                    if(file_exists("$path/$dir/web.config")){
                         return "$path/$dir";
                     }
-                    if(is_dir($dir)){
-                        return self::findSubdirsWebPath($dir);
-                    }
+                    return self::findSubdirsWebPath($dir);
                 }
             }
         }
