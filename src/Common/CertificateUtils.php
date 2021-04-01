@@ -39,6 +39,9 @@ class CertificateUtils {
         }
         //TODO 创建CSR和KEY
         $newCsrAndKey = self::generateKeyPair($domains[0], FALSE); // 创建CSR，默认申请RSA证书
+
+        die(json_encode($newCsrAndKey));
+
         //TODO 准备创建订单
         $orderRlt = Encryption365Service::certCreate($pid, $product['period'], $newCsrAndKey['csr_code'], $domains, $org_id);
         if($orderRlt['result'] !== "success"){
@@ -277,7 +280,7 @@ class CertificateUtils {
                 $csr_resource = openssl_csr_new($subject, $private_key, array('digest_alg'=>'sha384', 'config'=>__DIR__.'/../Config/openssl.cnf') );
             }
             openssl_csr_export($csr_resource, $csr_string);
-            openssl_pkey_export($private_key, $private_key_string);
+            openssl_pkey_export($private_key, $private_key_string, null, array('config'=>__DIR__.'/../Config/openssl.cnf'));
         }catch (\Exception $exception){
             die($exception->getMessage());
         }

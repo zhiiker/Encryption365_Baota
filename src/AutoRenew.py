@@ -18,6 +18,8 @@ import sys
 import requests
 import json
 import Uninstall as UtiMod
+from panelSite import *
+from public import *
 
 panelPath = UtiMod.init_panel_path()
 
@@ -156,14 +158,17 @@ def get_site_info(siteId):
 # 调用宝塔面板API设置站点证书
 def plug_cert_to_site(siteId, certId, certData):
     s = get_site_info(siteId)
-    basePath = panelPath+'/vhost/cert/' + s[2]
-    if not os.path.exists(basePath):
-        os.makedirs(basePath, 384)
     lCert = get_local_cert(certId)
-    cert_file = basePath + '/fullchain.pem'
-    key_file = basePath + '/privkey.pem'
-    public.writeFile(cert_file, certData['cert_code'] + certData['ca_code'])
-    public.writeFile(key_file, lCert[13])
+    # 非IIS
+    if public.get_webserver() != 'iis':
+        basePath = panelPath+'/vhost/cert/' + s[2]
+        if not os.path.exists(basePath):
+            os.makedirs(basePath, 384)
+        cert_file = basePath + '/fullchain.pem'
+        key_file = basePath + '/privkey.pem'
+        public.writeFile(cert_file, certData['cert_code'] + certData['ca_code'])
+        public.writeFile(key_file, lCert[13])
+
     get = {'siteName': s[1], 'key': lCert[13], 'csr': certData['cert_code'] + "\n" + certData['ca_code']}
     gets = build_object_json(get)
     print(gets.siteName)
@@ -171,7 +176,7 @@ def plug_cert_to_site(siteId, certId, certData):
     if rt['status']:
         write_log('success', 'cert_installed', '证书#'+str(certId)+'安装成功！', certId)
     else:
-        write_log('error', 'cert_install_error', '证书#'+str(certId)+'安装出错: '+status['msg'], certId)
+        write_log('error', 'cert_install_error', '证书#'+str(certId)+'安装出错: '+rt['msg'], certId)
 
 
 # 创建通用对象
