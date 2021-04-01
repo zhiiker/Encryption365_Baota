@@ -198,7 +198,7 @@ class SiteRep{
                 }
             }
 
-            // 检查域名是否收到保护, 特地需要检查通配符域名
+            // 检查域名是否受到保护, 特地需要检查通配符域名
             foreach ($site['valid_domains']['domains'] as $key => $domain){
                 $ftdDomain = trim(strtolower($domain));
                 if(in_array($ftdDomain, $certSAN)){

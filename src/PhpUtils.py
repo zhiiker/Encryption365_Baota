@@ -16,7 +16,7 @@ import os
 import sys
 import requests
 import getopt
-
+import json
 import Uninstall as UtiMod
 
 panelPath = UtiMod.init_panel_path()
@@ -24,11 +24,51 @@ panelPath = UtiMod.init_panel_path()
 if not 'class/' in sys.path:
     sys.path.insert(0, 'class/')
 requests.DEFAULT_TYPE = 'curl'
+from panelSite import *
+
+
+# 获取站点SSL信息
+def get_ssl(optionalData=""):
+    print(json.dumps(panelSite().GetSSL(DictObj(optionalData))))
+
+
+# 获取IISSiteInfo
+def get_iis_site_info(optionalData=""):
+    print(json.dumps(panelSite().get_site_info(siteName = optionalData["siteName"])))
+
 
 
 # 获取Python的可执行路径
 def get_python_execute_path(optionalData=""):
+    print(optionalData['en'])
     print(sys.executable)
+
+
+# DIC转转对象
+class DictObj(object):
+    def __init__(self,map):
+        self.map = map
+
+    def __setattr__(self, name, value):
+        if name == 'map':
+             object.__setattr__(self, name, value)
+             return
+        self.map[name] = value
+
+    def __getattr__(self,name):
+        v = self.map[name]
+        if isinstance(v,(dict)):
+            return DictObj(v)
+        if isinstance(v, (list)):
+            r = []
+            for i in v:
+                r.append(DictObj(i))
+            return r
+        else:
+            return self.map[name]
+
+    def __getitem__(self,name):
+        return self.map[name]
 
 
 if __name__ == '__main__':
@@ -42,7 +82,7 @@ if __name__ == '__main__':
             elif(opt == '-d'):
                 data = arg
         if function and callable(eval(function)):
-            eval(str(function))(data)
+            eval(str(function))(json.loads(data))
         else:
             print("Not a Valid Callable method: "+function)
     except getopt.GetoptError:

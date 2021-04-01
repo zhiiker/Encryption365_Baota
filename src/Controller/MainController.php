@@ -12,6 +12,7 @@ namespace TrustOcean\Encryption365\Controller;
 use TrustOcean\Encryption365\Common\CertificateUtils;
 use TrustOcean\Encryption365\Common\DatabaseUtils;
 use TrustOcean\Encryption365\Common\Encryption365Service;
+use TrustOcean\Encryption365\Common\NginxVhostUtils;
 use TrustOcean\Encryption365\Common\TwigUtils;
 use TrustOcean\Encryption365\Encryption365Exception;
 use TrustOcean\Encryption365\Encryption365PageException;

@@ -85,6 +85,108 @@ class NginxVhostUtils {
         }
         return $runPath;
     }
+
+    /**
+     * 获取IIS站点运行目录
+     * @param $siteName
+     * @return string
+     */
+    public static function getrealIISSitePath($siteName) {
+        # 网站主目录
+        $db = DatabaseUtils::initBaoTaSystemDatabase();
+        $ch = $db->query("select `path` from sites where name = ?", $siteName)->fetch();
+        $root = $ch['path'];
+        return self::findSubdirsWebPath($root);
+    }
+
+    /**
+     * 查找IIS站点真实运行目录
+     * @param $path
+     * @return string
+     */
+    protected static function findSubdirsWebPath($path) {
+        if(file_exists("$path/web.config")){
+            return $path;
+        }else{
+            $dirs = scandir($path);
+            foreach ($dirs as $key => $dir){
+                if(!in_array($dir, ['.','..'])){
+                    if(file_exists("$dir/web.config")){
+                        return "$path/$dir";
+                    }
+                    if(is_dir($dir)){
+                        return self::findSubdirsWebPath($dir);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 获取IIS站点的配置信息
+     * @param $siteName
+     */
+    protected static function getIISConfigInfo($siteName) {
+        try{
+            $cert_file = self::getBtPanelPath()."/vhost/ssl/$siteName/fullchain.pfx";
+            # 网站主目录
+            $db = DatabaseUtils::initBaoTaSystemDatabase();
+            $ch = $db->query("select `path` from sites where name = ?", $siteName)->fetch();
+            $run_path = self::getrealIISSitePath($siteName);
+            $site_path = $ch['path'];
+            $config_path = "$run_path/web.config";
+            $ssl_info = self::callPython('get_ssl', ['siteName'=>$siteName]);
+            $cert_info = [];
+            // 格式转换PFX
+            if(file_exists($cert_file)){
+                $res = [];
+                $openSSL = openssl_pkcs12_read(file_get_contents($cert_file), $res, $ssl_info->data->password);
+
+                // this is the CER FILE
+                file_put_contents('CERT.cer', $res['pkey'].$res['cert'].implode('', $res['extracerts']));
+
+                $cert_info = openssl_x509_parse(((explode("-----END CERTIFICATE-----", $res['cert'])[0])."-----END CERTIFICATE-----"), TRUE);
+                $cert_info['valid_from'] = date('Y-m-d H:i:s', $cert_info['validFrom_time_t']);
+                $cert_info['valid_to'] = date('Y-m-d H:i:s', $cert_info['validTo_time_t']);
+                $cert_info['valid_to_date'] = date('Y-m-d', $cert_info['validTo_time_t']);
+                // 判断证书类型
+                $cert_class = "DV";
+                if(isset($cert_info['subject']['O'])){
+                    $cert_class = "OV";
+                }
+                if(isset($cert_info['subject']['serialNumber']) && isset($cert_info['subject']['businessCategory'])){
+                    $cert_class = "EV";
+                }
+                $cert_info['cert_class'] = $cert_class;
+            }
+
+            return array(
+                "config_file"=>$config_path,
+                "run_path"=>$run_path,
+                "has_cert"=>file_exists($cert_file),
+                "cert_file"=>$cert_file,
+                "ssl_enabled"=>$ssl_info->status,
+                "cert_info"=>$cert_info,
+                "is_redirect_https"=>$ssl_info->httpTohttps
+            );
+        }catch (\Exception $exception){
+            die($exception->getMessage());
+        }
+
+    }
+
+    /**
+     * 访问PhpUtils方法
+     * @param $func
+     * @param array $data
+     * @return mixed
+     */
+    public static function callPython($func, $data=[]){
+        $cmd = DatabaseUtils::findValidPythonExecutedPath()." ".realpath(__DIR__."/../PhpUtils.py")." -f $func -d ".str_replace('"','\"', json_encode($data));
+        exec($cmd, $rcc);
+        return json_decode($rcc[0]);
+    }
+
     /**
      * 查询本地站点的证书信息
      * @param $siteName
@@ -92,6 +194,10 @@ class NginxVhostUtils {
      * @throws Encryption365Exception
      */
     public static function getVhostConfigInfo($siteName) {
+        if(self::getWebserver() === 'iis'){
+            return self::getIISConfigInfo($siteName);
+        }
+        // 常见Web服务器
         $configs = self::getConfigPath()."$siteName.conf";
         $config_file = $configs;
         $has_cert = false;
