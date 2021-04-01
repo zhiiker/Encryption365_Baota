@@ -126,7 +126,7 @@ class NginxVhostUtils {
      */
     protected static function getIISConfigInfo($siteName) {
         try{
-            $cert_file = self::getBtPanelPath()."/vhost/ssl/$siteName/fullchain.pfx";
+            $cert_file = realpath(self::getBtPanelPath()."/../temp/ssl/$siteName.pfx");
             # 网站主目录
             $db = DatabaseUtils::initBaoTaSystemDatabase();
             $ch = $db->query("select `path` from sites where name = ?", $siteName)->fetch();
@@ -134,8 +134,6 @@ class NginxVhostUtils {
             $site_path = $ch['path'];
             $config_path = "$run_path/web.config";
             $ssl_info = self::callPython('get_ssl', ['siteName'=>$siteName]);
-            var_dump($ssl_info);
-            die();
 
             $cert_info = [];
             // 格式转换PFX
@@ -184,9 +182,7 @@ class NginxVhostUtils {
      */
     public static function callPython($func, $data=[]){
         $cmd = DatabaseUtils::findValidPythonExecutedPath()." ".realpath(__DIR__."/../PhpUtils.py")." -f $func -d ".str_replace('"','\"', json_encode($data));
-//        die($cmd);
-        exec($cmd, $rcc, $res);
-        die(json_encode($rcc));
+        exec($cmd, $rcc);
         return json_decode($rcc[0]);
     }
 

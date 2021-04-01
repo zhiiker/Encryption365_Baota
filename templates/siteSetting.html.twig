@@ -334,7 +334,7 @@
                         </table>
                     </div>
                 </div>
-                <div role="secureDetails" class="tab-pane {% if ssl_order.status is same as('issued_active') and site.insecure_domains is not empty %}active{% endif %}" id="secureDetails">
+                <div role="tabpanel" class="tab-pane {% if ssl_order.status is same as('issued_active') and site.insecure_domains is not empty %}active{% endif %}" id="secureDetails">
                     {# 域名信息 #}
                     <div class="col-md-12" style="padding: 0px;">
                         <table class="table encryption365-table divtable  dataTable no-footer enc365-infotable">
@@ -400,4 +400,16 @@
     {#    }, 2000);#}
     {#}#}
     {% endif %}
+    $(document).ready(function(){
+        /**
+         * 解决多页面的出现的TabPanel切换问题
+         */
+       $('li[role=presentation]>a[data-toggle=tab]').click(function(){
+           $('li[role=presentation]>a[data-toggle=tab]').parent().removeClass('active');
+           $(this).parent().addClass('active');
+           let tabIDSelector = $(this).attr('href');
+           $('.tab-content > div[role=tabpanel]').removeClass('active');
+           $('.tab-content > div'+tabIDSelector).addClass('active');
+       });
+    });
 </script>
