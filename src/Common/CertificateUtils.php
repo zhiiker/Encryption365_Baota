@@ -16,6 +16,8 @@ class CertificateUtils {
      */
     public static function createNewFullSSLOrder($vhost_name, $pid, $org_id=0, $autorenewal = false){
         $siteInfo = SiteRep::getSiteInfo($vhost_name);
+        die(json_encode($siteInfo));
+
         $db = DatabaseUtils::initLocalDatabase();
         //TODO 检查是否已经存在对应的证书了
         $check = $db->query('select * from certificate where site_id = ? limit 1', $siteInfo['id'])->fetch();

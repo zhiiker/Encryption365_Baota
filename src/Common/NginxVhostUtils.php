@@ -30,7 +30,15 @@ class NginxVhostUtils {
         $db = DatabaseUtils::initBaoTaSystemDatabase();
         $ch = $db->query("select `webserver` from config where id =1")->fetch();
         $webserver = $ch['webserver'];
-        return self::getBtPanelPath()."/vhost/$webserver/";
+        if(getenv('BT_PANEL') != ""){ # Windows系统
+            if(self::getWebserver() === "nginx"){
+                return self::getBtPanelPath()."/../nginx/conf/vhost/";
+            }
+            if(self::getWebserver() === "apache"){
+                return self::getBtPanelPath()."/../apache/conf/vhost/";
+            }
+        }
+        return realpath(self::getBtPanelPath()."/vhost/$webserver/");
     }
 
     /**
@@ -70,7 +78,7 @@ class NginxVhostUtils {
             }
             if (strpos($line, $webServerPathKey) !== FALSE) {
                 if ($webserverType === "nginx") {
-                    preg_match("/\ \/(.+);/i", $line, $matches);
+                    preg_match("/\ [a-zA-Z]?[:]?\/(.+);/i", $line, $matches);
                     $runPath = trim("/" . end($matches));
                 } elseif ($webserverType === "apache") {
                     preg_match("/DocumentRoot\ \"(.+)\"/i", $line, $matches);
@@ -193,8 +201,10 @@ class NginxVhostUtils {
      * @throws Encryption365Exception
      */
     public static function getVhostConfigInfo($siteName) {
-        if(self::getWebserver() === 'iis'){
-            return self::getIISConfigInfo($siteName);
+        if(getenv('BT_PANEL') != ""){
+            if(self::getWebserver() === "iis"){
+                return self::getIISConfigInfo($siteName);
+            }
         }
         // 常见Web服务器
         $configs = self::getConfigPath()."$siteName.conf";

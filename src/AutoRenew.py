@@ -160,7 +160,9 @@ def plug_cert_to_site(siteId, certId, certData):
     s = get_site_info(siteId)
     lCert = get_local_cert(certId)
     # 非IIS
-    if public.get_webserver() != 'iis':
+    # if public.get_webserver() != 'iis':
+    # 非Windows系统 , 暂时用法
+    if os.getenv('BT_PANEL') is not None:
         basePath = panelPath+'/vhost/cert/' + s[2]
         if not os.path.exists(basePath):
             os.makedirs(basePath, 384)
