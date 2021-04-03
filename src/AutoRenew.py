@@ -162,8 +162,8 @@ def plug_cert_to_site(siteId, certId, certData):
     # 非IIS
     # if public.get_webserver() != 'iis':
     # 非Windows系统 , 暂时用法
-    if os.getenv('BT_PANEL') is not None:
-        basePath = panelPath+'/vhost/cert/' + s[2]
+    if os.getenv('BT_PANEL') is None:
+        basePath = panelPath+'/vhost/cert/' + s[1]
         if not os.path.exists(basePath):
             os.makedirs(basePath, 384)
         cert_file = basePath + '/fullchain.pem'
