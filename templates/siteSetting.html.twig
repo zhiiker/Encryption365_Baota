@@ -158,57 +158,57 @@
 
     <div style="margin-left: 15px;">
         <!-- Nav tabs -->
-        <ul class="nav nav-tabs" role="tablist">
+        <div class="ui top attached tabular menu enc365-tab">
             {% if ssl_order is not empty %}
-                <li role="presentation" {% if site.insecure_domains is empty or ssl_order.status is same as('enroll_caprocessing')%}class="active"{% endif %}><a href="#orderDetails" aria-controls="profile" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-shopping-cart"></i> 订单信息</a></li>
+                <a class="item {% if site.insecure_domains is empty or ssl_order.status is same as('enroll_caprocessing')%}active{% endif %}" data-tab="orderDetails" aria-controls="profile" role="tab" data-toggle="tab">
+                    <i class="glyphicon glyphicon-shopping-cart"></i> 订单信息
+                </a>
             {% endif %}
             {% if site.vhost_info.ssl_enabled is same as(true) %}
-                <li role="presentation" {% if ssl_order is empty and (site.insecure_domains is empty or site.vhost_info.cert_info is not empty) %}class="active"{% endif %}><a href="#certDetails" aria-controls="profile" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-equalizer"></i> 证书信息</a></li>
-                <li role="presentation" {% if ssl_order.status is same as('issued_active') and site.insecure_domains is not empty %}class="active"{% endif %}><a href="#secureDetails" aria-controls="messages" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-globe"></i> 域名加密状态</a></li>
+                <a class="item {% if ssl_order is empty and (site.insecure_domains is empty or site.vhost_info.cert_info is not empty) %}active{% endif %}" data-tab="certDetails" aria-controls="profile" role="tab" data-toggle="tab">
+                    <i class="glyphicon glyphicon-equalizer"></i> 证书信息
+                </a>
+                <a class="item{% if ssl_order.status is same as('issued_active') and site.insecure_domains is not empty %} active{% endif %}" data-tab="secureDetails" aria-controls="messages" role="tab" data-toggle="tab">
+                    <i class="glyphicon glyphicon-globe"></i> 域名加密状态
+                </a>
                 {% if ssl_order.status is same as('issued_active') %}
-                    <li role="presentation">
-                        <a href="#keyCode" aria-controls="messages" role="tab" data-toggle="tab">
-                            <i class="glyphicon glyphicon-cog"></i> 私钥(KEY)
-                        </a>
-                    </li>
+                    <a class="item" data-tab="keyCode" aria-controls="messages" role="tab" data-toggle="tab">
+                        <i class="glyphicon glyphicon-cog"></i> 私钥(KEY)
+                    </a>
                 {% endif %}
                 {% if ssl_order.status is same as('issued_active') %}
-                    <li role="presentation">
-                        <a href="#certCode" aria-controls="messages" role="tab" data-toggle="tab">
-                            <i class="glyphicon glyphicon-cog"></i> 证书代码
-                        </a>
-                    </li>
+                    <a class="item" data-tab="certCode" aria-controls="messages" role="tab" data-toggle="tab">
+                        <i class="glyphicon glyphicon-cog"></i> 证书代码
+                    </a>
                 {% endif %}
                 {% if ssl_order.status is same as('issued_active') %}
-                    <li role="presentation">
-                        <a href="#csrCode" aria-controls="messages" role="tab" data-toggle="tab">
-                            <i class="glyphicon glyphicon-cog"></i> CSR代码
-                        </a>
-                    </li>
+                    <a class="item" data-tab="csrCode" aria-controls="messages" role="tab" data-toggle="tab">
+                        <i class="glyphicon glyphicon-cog"></i> CSR代码
+                    </a>
                 {% endif %}
             {% endif %}
-        </ul>
+        </div>
         <!-- Tab panes -->
         <div class="tab-content">
             {% if ssl_order.status is same as('issued_active') %}
-            <div role="tabpanel" class="tab-pane" id="csrCode">
+            <div class="ui tab" data-tab="csrCode">
                 <div class="col-md-12" style="padding: 0px;">
                     <pre style="border-top: none; border-radius: 0px; background: white;">{{ ssl_order.csr_code }}</pre>
                 </div>
             </div>
-            <div role="tabpanel" class="tab-pane" id="certCode">
+            <div class="ui tab" data-tab="certCode">
                 <div class="col-md-12" style="padding: 0px;">
                     <pre style="border-top: none; border-radius: 0px; background: white;">{{ ssl_order.cert_code }}</pre>
                 </div>
             </div>
-            <div role="tabpanel" class="tab-pane" id="keyCode">
+            <div class="ui tab" data-tab="keyCode">
                 <div class="col-md-12" style="padding: 0px;">
                     <pre style="border-top: none; border-radius: 0px; background: white;">{{ ssl_order.key_code }}</pre>
                 </div>
             </div>
             {% endif %}
             {% if ssl_order is not empty %}
-                <div role="tabpanel" class="tab-pane {% if site.insecure_domains is empty or ssl_order.status is same as('enroll_caprocessing')%}active{% endif %}" id="orderDetails">
+                <div class="ui tab {% if site.insecure_domains is empty or ssl_order.status is same as('enroll_caprocessing')%}active{% endif %}" data-tab="orderDetails">
                     <div class="col-md-12" style="padding: 0px;">
                         <table class="table encryption365-table divtable  dataTable no-footer enc365-infotable">
                             <tbody>
@@ -265,7 +265,7 @@
                 </div>
             {% endif %}
             {% if site.vhost_info.ssl_enabled is same as(true) %}
-                <div role="tabpanel" class="tab-pane {% if ssl_order is empty and (site.insecure_domains is empty or site.vhost_info.cert_info is not empty) %}active{% endif %}" id="certDetails">
+                <div class="ui tab {% if ssl_order is empty and (site.insecure_domains is empty or site.vhost_info.cert_info is not empty) %}active{% endif %}" data-tab="certDetails">
                     {#  证书有效期和基本信息  #}
                     <div class="col-md-12" style="padding: 0px;">
                         <table class="table encryption365-table divtable  dataTable no-footer enc365-infotable">
@@ -334,7 +334,7 @@
                         </table>
                     </div>
                 </div>
-                <div role="tabpanel" class="tab-pane {% if ssl_order.status is same as('issued_active') and site.insecure_domains is not empty %}active{% endif %}" id="secureDetails">
+                <div class="ui tab {% if ssl_order.status is same as('issued_active') and site.insecure_domains is not empty %}active{% endif %}" data-tab="secureDetails">
                     {# 域名信息 #}
                     <div class="col-md-12" style="padding: 0px;">
                         <table class="table encryption365-table divtable  dataTable no-footer enc365-infotable">
@@ -411,5 +411,8 @@
        //     $('.tab-content > div[role=tabpanel]').removeClass('active');
        //     $('.tab-content > div'+tabIDSelector).addClass('active');
        // });
+        $('.enc365-tab .item')
+            .tab()
+        ;
     });
 </script>

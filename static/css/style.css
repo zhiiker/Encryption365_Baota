@@ -492,3 +492,24 @@ table#sites>table>tbody>tr>td{
     font-weight: 600;
     font-size: 1.3rem;
 }
+
+.enc365-tab{
+    background: #f2f2f2;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+.enc365-tab .item{
+    padding: 15px 15px;
+    display: inline-block;
+    cursor: default;
+}
+.enc365-tab .item.active{
+    background: white;
+}
+.ui.tab{
+   display: none;
+}
+.ui.tab.active{
+    display: unset;
+}
