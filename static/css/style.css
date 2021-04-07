@@ -500,7 +500,7 @@ table#sites>table>tbody>tr>td{
     border-right: 1px solid #ddd;
 }
 .enc365-tab .item{
-    padding: 15px 15px;
+    padding: 12px 15px;
     display: inline-block;
     cursor: default;
 }
@@ -512,4 +512,10 @@ table#sites>table>tbody>tr>td{
 }
 .ui.tab.active{
     display: unset;
+}
+.ui-tab-content{
+    border-left: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    padding: 1rem 2rem;
 }
