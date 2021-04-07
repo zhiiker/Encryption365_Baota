@@ -217,7 +217,6 @@ class NginxVhostUtils {
         $is_redirect_https = false;
         $cert_class = "DV";
         $runPath = self::getVhostRunPath($configs);
-
         $lines = file($configs);
         foreach ($lines as $key => $line) {
             # 检查是否配置了SSL证书
@@ -237,7 +236,11 @@ class NginxVhostUtils {
                     $es = substr($ed, 0, -1);
                     $e = explode(" ", $es);
                     $cert_file = trim(str_replace(";", "",
-                        $s = str_replace(PHP_EOL, "", end($e))));
+                    $s = str_replace(PHP_EOL, "", end($e))));
+                    // 修复Windows Nginx 配置文件相对路径问题
+                    if(getenv('BT_PANEL') != "" && self::getWebserver() === "nginx"){
+                        $cert_file = dirname($configs)."/../".$cert_file;
+                    }
                     $cert_info = openssl_x509_parse(((explode("-----END CERTIFICATE-----", file_get_contents($cert_file))[0])."-----END CERTIFICATE-----"), TRUE);
                     $cert_info['valid_from'] = date('Y-m-d H:i:s', $cert_info['validFrom_time_t']);
                     $cert_info['valid_to'] = date('Y-m-d H:i:s', $cert_info['validTo_time_t']);
