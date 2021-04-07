@@ -275,6 +275,32 @@ class NginxVhostUtils {
                     $is_redirect_https = TRUE;
                 }
             }
+            // 修复Windows Apache 配置文件相对路径文件
+            if(getenv('BT_PANEL') != "" && self::getWebserver() === "apache"){
+                if(strpos($line, "SSLEngine On") !== false){
+                    $ssl_enabled = true;
+                }
+            }
+        }
+        // 修复Windows Apache 配置文件相对路径文件
+        if(getenv('BT_PANEL') != "" && self::getWebserver() === "apache"){
+            $cert_file = dirname($configs)."/../ssl/$siteName/fullchain.pem";
+            $key_file = dirname($configs)."/../ssl/$siteName/privkey.pem";
+            if(file_exists($cert_file) && file_exists($key_file)){
+                $has_cert = true;
+            }
+            $cert_info = openssl_x509_parse(((explode("-----END CERTIFICATE-----", file_get_contents($cert_file))[0])."-----END CERTIFICATE-----"), TRUE);
+            $cert_info['valid_from'] = date('Y-m-d H:i:s', $cert_info['validFrom_time_t']);
+            $cert_info['valid_to'] = date('Y-m-d H:i:s', $cert_info['validTo_time_t']);
+            $cert_info['valid_to_date'] = date('Y-m-d', $cert_info['validTo_time_t']);
+            // 判断证书类型
+            if(isset($cert_info['subject']['O'])){
+                $cert_class = "OV";
+            }
+            if(isset($cert_info['subject']['serialNumber']) && isset($cert_info['subject']['businessCategory'])){
+                $cert_class = "EV";
+            }
+            $cert_info['cert_class'] = $cert_class;
         }
 
         return array(
