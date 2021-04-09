@@ -29,13 +29,12 @@ class SiteRep{
         }catch(\Exception $exception){
             return $exception->getMessage();
         }
-
         $sites = json_decode(json_encode($sites), 1);
         // 查询证书配置信息
         foreach ($sites as $key => $site){
              $vhostInfo = NginxVhostUtils::getVhostConfigInfo($site['name']);
              $sites[$key]['vhost_info'] = $vhostInfo;
-             $sites[$key]['ssl_order'] = $dbLocal->query('select `id`,`is_business`,`is_auto_renew` from certificate where `site_id`=?', ($site['id']))->fetch();
+             $sites[$key]['ssl_order'] = $dbLocal->query('select `id`,`status`,`is_business`,`is_auto_renew` from certificate where `site_id`=?', ($site['id']))->fetch();
         }
 
         return array(

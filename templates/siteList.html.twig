@@ -86,7 +86,11 @@
                         if(row.vhost_info.ssl_enabled === false && row.ssl_order === null){
                             return '<a href="javascript:;" class="btlink" onclick="encryption365.page(\'createSSLOrder\', {siteName: \''+row.name+'\'}, \'数据加载中\')" style="color: #ff5722;">申请</a>';
                         }else{
-                            return '<a href="javascript:;" class="btlink" onclick="encryption365.page(\'siteSetting\', {siteName: \''+row.name+'\'}, \'数据加载中\')">设置</a>';
+                            var status_html = "";
+                            if(null !== row.ssl_order && row.ssl_order.status === "enroll_caprocessing"){
+                                status_html = '<img src="/encryption365/static/img/ajax-loader.gif" style="margin-top: -2px;">';
+                            }
+                            return status_html+' <a href="javascript:;" class="btlink" onclick="encryption365.page(\'siteSetting\', {siteName: \''+row.name+'\'}, \'数据加载中\')">设置</a>';
                         }
                     }
                 }
