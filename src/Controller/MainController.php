@@ -100,6 +100,17 @@ class MainController{
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
+    public function getOnlineSupport() {
+        $this->checkInitAcc();
+        return $this->twig->render('onlineSupport.html.twig');
+    }
+
+    /**
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
     public function siteList(){
         $this->checkInitAcc();
         return $this->twig->render('siteList.html.twig');
