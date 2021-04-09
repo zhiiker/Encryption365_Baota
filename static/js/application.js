@@ -338,7 +338,7 @@ var encryption365 = {
         // 计算总金额
         let cartTotal = 0.00;
         for (let key in price){
-            if(price[key] >= 0){
+            if(price[key] >= 0 && undefined !== domainCount[key]){
                 var nicePrice = price[key]*domainCount[key];
                 cartTotal += nicePrice;
                 // 展示域名费用小计
