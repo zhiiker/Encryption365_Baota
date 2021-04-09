@@ -38,7 +38,7 @@ class NginxVhostUtils {
                 return self::getBtPanelPath()."/../apache/conf/vhost/";
             }
         }
-        return realpath(self::getBtPanelPath()."/vhost/$webserver/");
+        return realpath(self::getBtPanelPath()."/vhost/$webserver/")."/";
     }
 
     /**
