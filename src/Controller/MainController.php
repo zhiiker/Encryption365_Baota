@@ -40,7 +40,7 @@ class MainController{
             // 检查和初始化数据库
             $this->checkAndInstallDatabase();
             // 检查并设置自动化任务
-            DatabaseUtils::installCronJob();
+             DatabaseUtils::installCronJob();
         }catch(\Exception $exception){
            die($exception->getMessage());
         }

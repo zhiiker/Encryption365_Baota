@@ -118,8 +118,9 @@ create unique index logs_id_uindex
     public static function installCronJob() {
         $db = self::initBaoTaSystemDatabase();
         $echo = "5eeb48072b7a0fc713483bd5ade1d59d";
-        $check = $db->query("select `id` from crontab where `echo` = ?", ($echo))->fetch();
-        if(empty($check)){
+        $check = $db->query("select `id` from crontab where `name` = ?", ("Encryption365™ 证书自动化"))->fetch();
+        // Windows系统
+        if(is_dir(getenv("BT_PANEL")) && empty($check)){
             $pyEnv = self::findValidPythonExecutedPath();
             $db->query("INSERT INTO `crontab` ?", [
                 'echo'=>$echo,
@@ -137,44 +138,12 @@ create unique index logs_id_uindex
                 'sType'=>'toShell',
                 'urladdress'=>"",
             ]);
+            // 写入宝塔任务
+            $shellContent = "$pyEnv ".NginxVhostUtils::getBtPanelPath()."/plugin/encryption365/src/AutoRenew.py >>".NginxVhostUtils::getBtPanelPath()."/../cron/$echo.log 2>&1 && echo ----------------------------------------------------------------------------  >> ".NginxVhostUtils::getBtPanelPath()."/../cron/$echo.log 2>&1 && echo %date%  %time%  Successful >> ".NginxVhostUtils::getBtPanelPath()."/../cron/$echo.log 2>&1 && echo ----------------------------------------------------------------------------";
+            if(!is_dir(NginxVhostUtils::getBtPanelPath()."/../cron/")){mkdir(NginxVhostUtils::getBtPanelPath()."/../cron/");}
+            $baseShell = NginxVhostUtils::getBtPanelPath()."/../cron/".$echo;
+            file_put_contents($baseShell,str_replace("\r\n","\n", $shellContent));
 
-            // Windows系统
-            if(is_dir(NginxVhostUtils::getBtPanelPath())){
-                // 写入宝塔任务
-                $shellContent = "$pyEnv ".NginxVhostUtils::getBtPanelPath()."/plugin/encryption365/src/AutoRenew.py >>".NginxVhostUtils::getBtPanelPath()."/../cron/$echo.log 2>&1 && echo ----------------------------------------------------------------------------  >> ".NginxVhostUtils::getBtPanelPath()."/../cron/$echo.log 2>&1 && echo %date%  %time%  Successful >> ".NginxVhostUtils::getBtPanelPath()."/../cron/$echo.log 2>&1 && echo ----------------------------------------------------------------------------";
-                if(!is_dir(NginxVhostUtils::getBtPanelPath()."/../cron/")){mkdir(NginxVhostUtils::getBtPanelPath()."/../cron/");}
-                $baseShell = NginxVhostUtils::getBtPanelPath()."/../cron/".$echo;
-                file_put_contents($baseShell,str_replace("\r\n","\n", $shellContent));
-            }else{
-                // 非Windows系统
-                // 写入宝塔任务
-                $shellContent = "#!/bin/bash
-PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
-export PATH
-export PYTHONIOENCODING=utf-8
-$pyEnv ".NginxVhostUtils::getBtPanelPath()."/plugin/encryption365/src/AutoRenew.py
-echo \"----------------------------------------------------------------------------\"
-endDate=`date +\"%Y-%m-%d %H:%M:%S\"`
-echo \"★[\$endDate] Successful\"
-echo \"----------------------------------------------------------------------------\"";
-                if(!is_dir(NginxVhostUtils::getBtPanelPath()."/../cron/")){mkdir(NginxVhostUtils::getBtPanelPath()."/../cron/");}
-                $baseShell = NginxVhostUtils::getBtPanelPath()."/../cron/".$echo;
-                file_put_contents($baseShell,str_replace("\r\n","\n", $shellContent));
-                // 写Cron WriteShell
-                $rootCronPath = "/var/spool/cron";
-                if(!is_dir($rootCronPath)){
-                    mkdir($rootCronPath, 472, true);
-                }
-                // Ubuntu系统可能路径不一致
-                if(is_dir($rootCronPath.'/crontabs')){
-                    $rootCronPath .= '/crontabs';
-                }
-                $cronFile = $rootCronPath.'/root';
-                $excuteLine = "*/1 * * * * ".NginxVhostUtils::getBtPanelPath()."/../cron/$echo >> ".NginxVhostUtils::getBtPanelPath()."/../cron/$echo.log 2>&1"."\n";
-                file_put_contents($cronFile, $excuteLine, FILE_APPEND);
-                // 设置权限
-                chmod($baseShell, 755);
-            }
             self::reloadCrond();
             LogUtils::writeLog('success','cron_setup','设置定时任务成功PythonEnv: '.$pyEnv.'');
         }

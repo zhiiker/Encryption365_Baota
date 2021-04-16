@@ -93,7 +93,7 @@ def get_baota_database():
 
 def get_setup_path():
     db = get_baota_database().cursor()
-    c = db.execute('select `id` from crontab where `echo` = "5eeb48072b7a0fc713483bd5ade1d59d"')
+    c = db.execute('select `id` from crontab where `name` = "Encryption365™ 证书自动化"')
     cron_id = c.fetchall()[0][0]
 
 
@@ -104,7 +104,7 @@ def uninstall():
     print('已完成数据库备份')
     # 调用Baota API删除已创建的CronTab
     db = get_baota_database().cursor()
-    c = db.execute('select `id` from crontab where `echo` = "5eeb48072b7a0fc713483bd5ade1d59d"')
+    c = db.execute('select `id` from crontab where `name` = "Encryption365™ 证书自动化"')
     cron_id = c.fetchall()[0][0]
     gets = public.dict_obj()
     gets.id = cron_id
