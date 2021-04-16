@@ -7,9 +7,9 @@
 - 验证完成后自动安装(更新)站点的SSL证书
 
 ## 在线支持微信群
-![](https://www.qiaokr.com/wp-content/uploads/2021/04/ebd8e343-9c2e-4fb2-897b-204645312d01.jpg)
+![](https://www.qiaokr.com/wp-content/uploads/2021/04/ebd8e343-9c2e-4fb2-897b-204645312d01.jpg?ver=20210416)
 
-二维码失效请访问【[最新加群二维码](https://www.qiaokr.com/wp-content/uploads/2021/04/ebd8e343-9c2e-4fb2-897b-204645312d01.jpg)】
+二维码失效请访问【[最新加群二维码](https://www.qiaokr.com/wp-content/uploads/2021/04/ebd8e343-9c2e-4fb2-897b-204645312d01.jpg?ver=20210416)】
 
 ## 在线QQ客服处理问题
 客服QQ: 2852368244
